@@ -1,356 +1,1227 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>My AI</title>
+  <title>My AI</title>
 
-<style>
-*{
-  box-sizing:border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body{
-  margin:0;
-  background:#080808;
-  color:white;
-  font-family:Arial,sans-serif;
-}
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #0b0d12;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-header{
-  height:70px;
-  display:flex;
-  align-items:center;
-  padding:10px 18px;
-  background:#101010;
-  border-bottom:1px solid #292929;
-}
+    button,
+    input,
+    textarea {
+      font-family: inherit;
+    }
 
-.logo{
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  border:2px solid #ff2020;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
-  color:#ff3030;
-  margin-left:12px;
-  box-shadow:0 0 15px #ff202055;
-}
+    /* ================= LOGIN ================= */
 
-.title{
-  font-size:21px;
-  font-weight:bold;
-}
+    #loginPage {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        radial-gradient(circle at top, #252b45, #0b0d12 60%);
+      padding: 20px;
+    }
 
-.status{
-  margin-right:auto;
-  color:#28e66b;
-  font-size:13px;
-}
+    .loginBox {
+      width: 100%;
+      max-width: 420px;
+      padding: 35px 25px;
+      border-radius: 25px;
+      background: rgba(20, 24, 35, 0.9);
+      border: 1px solid #303747;
+      text-align: center;
+      box-shadow: 0 20px 70px rgba(0,0,0,.45);
+    }
 
-#chat{
-  height:calc(100vh - 140px);
-  overflow-y:auto;
-  padding:18px;
-}
+    .loginLogo {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 25px;
+      margin-bottom: 18px;
+    }
 
-.message{
-  max-width:85%;
-  padding:12px 15px;
-  margin:10px 0;
-  border-radius:16px;
-  line-height:1.8;
-  white-space:pre-wrap;
-  word-wrap:break-word;
-}
+    .loginBox h1 {
+      margin: 5px 0 10px;
+      font-size: 30px;
+    }
 
-.ai{
-  background:#171717;
-  border:1px solid #292929;
-  margin-left:auto;
-}
+    .loginBox p {
+      color: #aeb6c8;
+      margin-bottom: 25px;
+    }
 
-.user{
-  background:#b80000;
-  margin-right:auto;
-}
+    #googleLogin {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 14px;
+      background: white;
+      color: #111;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-.bottom{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:70px;
-  padding:10px;
-  background:#101010;
-  display:flex;
-  gap:8px;
-  border-top:1px solid #292929;
-}
+    #googleLogin:hover {
+      opacity: .9;
+    }
 
-input{
-  flex:1;
-  background:#1b1b1b;
-  border:1px solid #333;
-  border-radius:14px;
-  color:white;
-  padding:0 15px;
-  outline:none;
-  font-size:15px;
-}
+    #loginError {
+      color: #ff7272;
+      margin-top: 15px;
+      font-size: 14px;
+    }
 
-input:focus{
-  border-color:#e00000;
-}
+    /* ================= APP ================= */
 
-button{
-  width:65px;
-  border:0;
-  border-radius:14px;
-  background:#e00000;
-  color:white;
-  font-size:20px;
-  cursor:pointer;
-}
+    #app {
+      display: none;
+      width: 100%;
+      height: 100vh;
+    }
 
-button:active{
-  transform:scale(.95);
-}
+    .layout {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
 
-.empty{
-  text-align:center;
-  color:#777;
-  margin-top:35vh;
-}
-</style>
+    /* ================= SIDEBAR ================= */
+
+    .sidebar {
+      width: 290px;
+      height: 100%;
+      background: #11151e;
+      border-left: 1px solid #282e3a;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px;
+      margin-bottom: 15px;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .brand span {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    #newChat {
+      border: 0;
+      border-radius: 13px;
+      padding: 13px;
+      background: #20283a;
+      color: white;
+      cursor: pointer;
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+
+    #newChat:hover {
+      background: #2b3650;
+    }
+
+    .chatList {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .chatItem {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px;
+      border-radius: 11px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      color: #dbe1ec;
+    }
+
+    .chatItem:hover {
+      background: #1b2130;
+    }
+
+    .chatItem.active {
+      background: #252d40;
+    }
+
+    .chatTitle {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 14px;
+    }
+
+    .deleteChat {
+      border: 0;
+      background: transparent;
+      color: #8d95a5;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .deleteChat:hover {
+      color: #ff6464;
+    }
+
+    /* ================= USER ================= */
+
+    .userBox {
+      border-top: 1px solid #282e3a;
+      padding-top: 13px;
+      margin-top: 10px;
+    }
+
+    .userInfo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .userInfo img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+    }
+
+    .userText {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .userName {
+      font-size: 13px;
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .userEmail {
+      font-size: 11px;
+      color: #8992a4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #logout {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border: 0;
+      border-radius: 10px;
+      background: #25191d;
+      color: #ff9292;
+      cursor: pointer;
+    }
+
+    /* ================= CHAT ================= */
+
+    .chatArea {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .topbar {
+      height: 65px;
+      border-bottom: 1px solid #282e3a;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 10px;
+    }
+
+    #mobileMenu {
+      display: none;
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 23px;
+      cursor: pointer;
+    }
+
+    #currentChatTitle {
+      font-size: 16px;
+      font-weight: bold;
+      flex: 1;
+    }
+
+    #themeButton {
+      border: 0;
+      background: #1b2130;
+      color: white;
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 25px;
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: 17px;
+    }
+
+    .message.user {
+      justify-content: flex-start;
+    }
+
+    .message.ai {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: min(750px, 85%);
+      padding: 13px 16px;
+      border-radius: 17px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .user .bubble {
+      background: #27334a;
+      border-bottom-left-radius: 5px;
+    }
+
+    .ai .bubble {
+      background: #171d28;
+      border: 1px solid #292f3c;
+      border-bottom-right-radius: 5px;
+    }
+
+    .aiHeader {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+      font-size: 12px;
+      color: #9da7ba;
+    }
+
+    .aiHeader img {
+      width: 25px;
+      height: 25px;
+      border-radius: 8px;
+    }
+
+    /* ================= INPUT ================= */
+
+    .inputArea {
+      padding: 15px;
+      border-top: 1px solid #282e3a;
+    }
+
+    .inputBox {
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      gap: 8px;
+      background: #171c26;
+      border: 1px solid #303747;
+      border-radius: 17px;
+      padding: 8px;
+    }
+
+    #messageInput {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: white;
+      resize: none;
+      padding: 10px;
+      min-height: 45px;
+      max-height: 140px;
+    }
+
+    #sendButton {
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 13px;
+      background: #5b6cff;
+      color: white;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    #sendButton:hover {
+      opacity: .9;
+    }
+
+    /* ================= LIGHT ================= */
+
+    body.light {
+      background: #f3f5f8;
+      color: #111;
+    }
+
+    body.light .sidebar {
+      background: white;
+      border-color: #ddd;
+    }
+
+    body.light .topbar,
+    body.light .inputArea {
+      border-color: #ddd;
+    }
+
+    body.light .chatItem:hover,
+    body.light .chatItem.active {
+      background: #edf0f5;
+      color: #111;
+    }
+
+    body.light .inputBox {
+      background: white;
+      border-color: #ddd;
+    }
+
+    body.light #messageInput {
+      color: #111;
+    }
+
+    body.light .ai .bubble {
+      background: white;
+      border-color: #ddd;
+    }
+
+    body.light .user .bubble {
+      background: #e2e7f5;
+      color: #111;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 700px) {
+
+      .sidebar {
+        position: fixed;
+        z-index: 50;
+        right: -310px;
+        top: 0;
+        transition: right .25s ease;
+        box-shadow: -15px 0 40px rgba(0,0,0,.4);
+      }
+
+      .sidebar.open {
+        right: 0;
+      }
+
+      #mobileMenu {
+        display: block;
+      }
+
+      .messages {
+        padding: 15px;
+      }
+
+      .bubble {
+        max-width: 90%;
+      }
+    }
+
+    .empty {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #8791a5;
+      text-align: center;
+    }
+
+    .empty img {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      margin-bottom: 15px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-  <div class="logo">AI</div>
+<!-- ================= LOGIN PAGE ================= -->
 
-  <div class="title">
-    MY AI
+<section id="loginPage">
+
+  <div class="loginBox">
+
+    <img src="ai.png" class="loginLogo" alt="My AI">
+
+    <h1>My AI</h1>
+
+    <p>
+      برای استفاده از My AI وارد حساب Google خود شوید.
+    </p>
+
+    <button id="googleLogin">
+      🔵 ورود با Google
+    </button>
+
+    <div id="loginError"></div>
+
   </div>
 
-  <div class="status" id="status">
-    در حال آماده‌سازی...
+</section>
+
+
+<!-- ================= APP ================= -->
+
+<section id="app">
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+      <div class="brand">
+        <img src="ai.png" alt="AI">
+        <span>My AI</span>
+      </div>
+
+      <button id="newChat">
+        ＋ چت جدید
+      </button>
+
+      <div class="chatList" id="chatList"></div>
+
+      <div class="userBox">
+
+        <div class="userInfo">
+
+          <img id="userPhoto" src="ai.png">
+
+          <div class="userText">
+            <div class="userName" id="userName">
+              کاربر
+            </div>
+
+            <div class="userEmail" id="userEmail">
+              -
+            </div>
+          </div>
+
+        </div>
+
+        <button id="logout">
+          خروج از حساب
+        </button>
+
+      </div>
+
+    </aside>
+
+
+    <!-- CHAT AREA -->
+
+    <main class="chatArea">
+
+      <div class="topbar">
+
+        <button id="mobileMenu">
+          ☰
+        </button>
+
+        <div id="currentChatTitle">
+          چت جدید
+        </div>
+
+        <button id="themeButton">
+          🌙
+        </button>
+
+      </div>
+
+
+      <div class="messages" id="messages">
+
+        <div class="empty">
+
+          <div>
+
+            <img src="ai.png" alt="AI">
+
+            <h2>به My AI خوش آمدی 🤖</h2>
+
+            <p>
+              یک پیام بنویس تا گفتگو را شروع کنیم.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="inputArea">
+
+        <div class="inputBox">
+
+          <textarea
+            id="messageInput"
+            placeholder="پیامت را بنویس..."
+            rows="1"></textarea>
+
+          <button id="sendButton">
+            ➤
+          </button>
+
+        </div>
+
+      </div>
+
+    </main>
+
   </div>
-</header>
 
-<div id="chat">
-  <div class="empty" id="empty">
-    🧠 در حال بارگذاری مغز AI...
-  </div>
-</div>
-
-<div class="bottom">
-  <input
-    id="input"
-    type="text"
-    placeholder="پیامت را بنویس..."
-    autocomplete="off"
-  >
-
-  <button onclick="sendMessage()">➤</button>
-</div>
-
-<script>
-
-let brain = {};
-
-const chat = document.getElementById("chat");
-const input = document.getElementById("input");
-const statusText = document.getElementById("status");
-const empty = document.getElementById("empty");
+</section>
 
 
-/* -------------------------
-   بارگذاری data.json
-------------------------- */
+<!-- ================= FIREBASE ================= -->
 
-async function loadBrain(){
+<script type="module">
 
-  try{
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
-    const response = await fetch("data.json");
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithRedirect,
+    getRedirectResult,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-    if(!response.ok){
-      throw new Error("data.json پیدا نشد");
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    setDoc,
+    getDocs,
+    getDoc,
+    deleteDoc,
+    doc,
+    query,
+    orderBy,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+  import { firebaseConfig }
+    from "./firebase-config.js";
+
+
+  /* ================= FIREBASE ================= */
+
+  const app = initializeApp(firebaseConfig);
+
+  const auth = getAuth(app);
+
+  const db = getFirestore(app);
+
+  const googleProvider = new GoogleAuthProvider();
+
+
+  /* ================= VARIABLES ================= */
+
+  let currentUser = null;
+
+  let currentChatId = null;
+
+  let chats = {};
+
+  let brain = {};
+
+  let currentMessages = [];
+
+
+  /* ================= ELEMENTS ================= */
+
+  const loginPage =
+    document.getElementById("loginPage");
+
+  const appPage =
+    document.getElementById("app");
+
+  const googleLogin =
+    document.getElementById("googleLogin");
+
+  const loginError =
+    document.getElementById("loginError");
+
+  const chatList =
+    document.getElementById("chatList");
+
+  const messages =
+    document.getElementById("messages");
+
+  const messageInput =
+    document.getElementById("messageInput");
+
+  const sendButton =
+    document.getElementById("sendButton");
+
+  const newChat =
+    document.getElementById("newChat");
+
+  const currentChatTitle =
+    document.getElementById("currentChatTitle");
+
+  const userName =
+    document.getElementById("userName");
+
+  const userEmail =
+    document.getElementById("userEmail");
+
+  const userPhoto =
+    document.getElementById("userPhoto");
+
+  const logout =
+    document.getElementById("logout");
+
+  const themeButton =
+    document.getElementById("themeButton");
+
+  const mobileMenu =
+    document.getElementById("mobileMenu");
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+
+  /* ================= LOAD BRAIN ================= */
+
+  async function loadBrain() {
+
+    try {
+
+      const response =
+        await fetch("data.json");
+
+      brain =
+        await response.json();
+
+      console.log(
+        "AI brain loaded:",
+        Object.keys(brain).length
+      );
+
+    } catch (error) {
+
+      console.error(
+        "data.json error:",
+        error
+      );
+
+      brain = {};
+
     }
 
-    brain = await response.json();
+  }
 
-    statusText.textContent =
-      "● آماده | " + Object.keys(brain).length + " پاسخ";
 
-    empty.remove();
+  /* ================= GOOGLE LOGIN ================= */
 
-    addMessage(
-      "🧠 مغز من آماده شد!\n" +
-      Object.keys(brain).length +
-      " سؤال و جواب از data.json یاد گرفتم.",
-      "ai"
+  googleLogin.addEventListener(
+    "click",
+    async () => {
+
+      loginError.textContent = "";
+
+      try {
+
+        await signInWithRedirect(
+          auth,
+          googleProvider
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        loginError.textContent =
+          "خطا در ورود با Google: " +
+          error.message;
+
+      }
+
+    }
+  );
+
+
+  /* ================= REDIRECT RESULT ================= */
+
+  try {
+
+    await getRedirectResult(auth);
+
+  } catch (error) {
+
+    console.error(
+      "Google redirect error:",
+      error
     );
 
-  }catch(error){
-
-    statusText.textContent = "● خطا";
-
-    empty.textContent =
-      "⚠️ فایل data.json پیدا نشد.";
+    loginError.textContent =
+      "ورود Google انجام نشد.";
 
   }
 
-}
 
+  /* ================= AUTH STATE ================= */
 
-/* -------------------------
-   اضافه کردن پیام
-------------------------- */
+  onAuthStateChanged(
+    auth,
+    async (user) => {
 
-function addMessage(text,type){
+      if (user) {
 
-  const message = document.createElement("div");
+        currentUser = user;
 
-  message.className =
-    "message " + type;
+        loginPage.style.display = "none";
 
-  message.textContent = text;
+        appPage.style.display = "block";
 
-  chat.appendChild(message);
+        userName.textContent =
+          user.displayName || "کاربر";
 
-  chat.scrollTop = chat.scrollHeight;
-}
+        userEmail.textContent =
+          user.email || "";
 
+        if (user.photoURL) {
 
-/* -------------------------
-   تمیز کردن متن
-------------------------- */
+          userPhoto.src =
+            user.photoURL;
 
-function cleanText(text){
+        }
 
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[؟?!.,،]/g,"")
-    .replace(/\s+/g," ");
+        await loadBrain();
 
-}
+        await loadChats();
 
+      } else {
 
-/* -------------------------
-   پیدا کردن جواب
-------------------------- */
+        currentUser = null;
 
-function findAnswer(question){
+        loginPage.style.display = "flex";
 
-  const q = cleanText(question);
+        appPage.style.display = "none";
 
-  const keys = Object.keys(brain);
-
-
-  /* جواب دقیق */
-
-  for(const key of keys){
-
-    if(cleanText(key) === q){
-
-      return brain[key];
+      }
 
     }
-
-  }
-
-
-  /* اگر سؤال شامل کلید بود */
-
-  for(const key of keys){
-
-    const k = cleanText(key);
-
-    if(
-      q.includes(k) ||
-      k.includes(q)
-    ){
-
-      return brain[key];
-
-    }
-
-  }
+  );
 
 
-  return null;
-}
+  /* ================= LOAD CHATS ================= */
 
+  async function loadChats() {
 
-/* -------------------------
-   ارسال پیام
-------------------------- */
+    if (!currentUser) return;
 
-function sendMessage(){
+    chats = {};
 
-  const text = input.value.trim();
+    chatList.innerHTML = "";
 
-  if(!text) return;
+    try {
 
-  addMessage(text,"user");
+      const chatsRef =
+        collection(
+          db,
+          "users",
+          currentUser.uid,
+          "chats"
+        );
 
-  input.value = "";
+      const q =
+        query(
+          chatsRef,
+          orderBy(
+            "updatedAt",
+            "desc"
+          )
+        );
 
-  setTimeout(()=>{
+      const snapshot =
+        await getDocs(q);
 
-    const answer = findAnswer(text);
+      snapshot.forEach(
+        (item) => {
 
-    if(answer){
+          chats[item.id] = {
+            id: item.id,
+            ...item.data()
+          };
 
-      addMessage(answer,"ai");
+        }
+      );
 
-    }else{
+      renderChatList();
 
-      addMessage(
-        "🤔 این سؤال را هنوز بلد نیستم.\n\n" +
-        "می‌توانی آن را به data.json اضافه کنی.",
-        "ai"
+      const chatIds =
+        Object.keys(chats);
+
+      if (chatIds.length > 0) {
+
+        await openChat(chatIds[0]);
+
+      } else {
+
+        await createChat();
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Load chats error:",
+        error
+      );
+
+      alert(
+        "چت‌ها بارگذاری نشدند. قوانین Firestore را بررسی کن."
       );
 
     }
 
-  },300);
-
-}
+  }
 
 
-/* -------------------------
-   Enter
-------------------------- */
+  /* ================= RENDER CHAT LIST ================= */
 
-input.addEventListener(
-  "keydown",
-  function(event){
+  function renderChatList() {
 
-    if(event.key === "Enter"){
+    chatList.innerHTML = "";
 
-      sendMessage();
+    const list =
+      Object.values(chats);
+
+    list.forEach(
+      (chat) => {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "chatItem" +
+          (
+            chat.id === currentChatId
+              ? " active"
+              : ""
+          );
+
+        const title =
+          document.createElement("div");
+
+        title.className =
+          "chatTitle";
+
+        title.textContent =
+          chat.title || "چت جدید";
+
+
+        const del =
+          document.createElement("button");
+
+        del.className =
+          "deleteChat";
+
+        del.textContent =
+          "🗑";
+
+        del.onclick =
+          async (event) => {
+
+            event.stopPropagation();
+
+            await deleteChat(chat.id);
+
+          };
+
+
+        item.appendChild(title);
+
+        item.appendChild(del);
+
+        item.onclick =
+          () => openChat(chat.id);
+
+        chatList.appendChild(item);
+
+      }
+    );
+
+  }
+
+
+  /* ================= CREATE CHAT ================= */
+
+  async function createChat() {
+
+    if (!currentUser) return;
+
+    try {
+
+      const chatsRef =
+        collection(
+          db,
+          "users",
+          currentUser.uid,
+          "chats"
+        );
+
+      const newChatRef =
+        await addDoc(
+          chatsRef,
+          {
+            title: "چت جدید",
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          }
+        );
+
+      chats[newChatRef.id] = {
+
+        id: newChatRef.id,
+
+        title: "چت جدید"
+
+      };
+
+      currentChatId =
+        newChatRef.id;
+
+      currentMessages = [];
+
+      renderChatList();
+
+      renderMessages();
+
+      currentChatTitle.textContent =
+        "چت جدید";
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "ساخت چت انجام نشد."
+      );
 
     }
 
   }
-);
 
 
-/* -------------------------
-   شروع AI
-------------------------- */
+  /* ================= OPEN CHAT ================= */
 
-loadBrain();
+  async function openChat(chatId) {
 
-</script>
+    if (!currentUser) return;
 
-</body>
-</html>
+    currentChatId =
+      chatId;
+
+    const chat =
+      chats[chatId];
+
+    currentChatTitle.textContent =
+      chat?.title || "چت جدید";
+
+    renderChatList();
+
+    currentMessages = [];
+
+    try {
+
+      const messagesRef =
+        collection(
+          db,
+          "users",
+          currentUser.uid,
+          "chats",
+          chatId,
+          "messages"
+        );
+
+      const q =
+        query(
+          messagesRef,
+          orderBy(
+            "createdAt",
+            "asc"
+          )
+        );
+
+      const snapshot =
+        await getDocs(q);
+
+      snapshot.forEach(
+        (item) => {
+
+          currentMessages.push({
+            id: item.id,
+            ...item.data()
+          });
+
+        }
+      );
+
+      renderMessages();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "پیام‌های این چت خوانده نشدند."
+      );
+
+    }
+
+    sidebar.classList.remove("open");
+
+  }
+
+
+  /* ================= DELETE CHAT ================= */
+
+  async function deleteChat(chatId) {
+
+    if (!currentUser) return;
+
+    const ok =
+      confirm(
+        "این چت حذف شود؟"
+      );
+
+    if (!ok) return;
+
+    try {
+
+      const messagesRef =
+        collection(
+          db,
+          "users",
+          currentUser.uid,
+          "chats",
+          chatId,
+          "messages"
+        );
+
+      const snapshot =
+        await getDocs(messagesRef);
+
+      for (
+        const item of snapshot.docs
+      ) {
+
+        await deleteDoc(item.ref);
+
+      }
+
+      await deleteDoc(
+        doc(
+          db,
+          "users",
+          currentUser.uid,
+          "chats",
+          chatId
+        )
+      );
+
+      delete chats[chatId];
+
+      currentChatId = null;
+
+      currentMessages = [];
+
+      renderChatList();
+
+      const remaining =
+        Object.keys(chats);
+
+      if (remaining.length > 0) {
+
+        await openChat(
+          remaining[0]
+        );
+
+      } else {
+
+        await createChat();
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "حذف چت انجام نشد."
+      );
+
+    }
+
+  }
+
+
+  /* ================= SAVE MESSAGE ================= */
+
+  async function saveMessage(
+    role,
+    text
+  ) {
+
+    if (
+      !currentUser ||
+      !currentChatId
+    ) return;
+
+    try {
+
+      const messagesRef =
+        colle
