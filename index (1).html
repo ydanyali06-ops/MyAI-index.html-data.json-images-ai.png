@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My AI</title>
+
+<style>
+body{
+    margin:0;
+    background:#080808;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+
+.logo{
+    width:120px;
+    height:120px;
+    margin:40px auto 20px;
+    border-radius:50%;
+    border:6px solid red;
+    background:#111;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 0 30px red;
+}
+
+.logo span{
+    font-size:35px;
+    font-weight:bold;
+}
+
+h1{
+    color:red;
+}
+
+#chat{
+    padding:20px;
+}
+
+input{
+    width:70%;
+    padding:15px;
+    background:#222;
+    color:white;
+    border:1px solid red;
+    border-radius:10px;
+}
+
+button{
+    padding:15px;
+    background:red;
+    color:white;
+    border:0;
+    border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="logo">
+    <span>AI</span>
+</div>
+
+<h1>MY AI</h1>
+
+<div id="chat">
+    <p>🤖 سلام! من My AI هستم.</p>
+</div>
+
+<input id="message" placeholder="پیامت را بنویس">
+<button onclick="send()">ارسال</button>
+
+<script>
+
+function send(){
+
+    let input = document.getElementById("message");
+    let text = input.value.trim();
+
+    if(text === ""){
+        return;
+    }
+
+    document.getElementById("chat").innerHTML +=
+        "<p>👤 " + text + "</p>";
+
+    document.getElementById("chat").innerHTML +=
+        "<p>🤖 پیام تو را دریافت کردم!</p>";
+
+    input.value = "";
+}
+
+</script>
+
+</body>
+</html>
