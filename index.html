@@ -6,155 +6,95 @@
   <title>My AI</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0f1115;
+      background: #101216;
       color: white;
-      min-height: 100vh;
     }
 
-    .container {
+    #loginPage {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
     }
 
     .card {
-      width: 100%;
-      max-width: 420px;
-      background: #181b22;
-      border: 1px solid #292d36;
-      border-radius: 24px;
-      padding: 35px 25px;
+      width: 90%;
+      max-width: 400px;
+      padding: 30px;
+      background: #1b1e25;
+      border-radius: 20px;
       text-align: center;
-    }
-
-    .logo {
-      width: 90px;
-      height: 90px;
-      border-radius: 22px;
-      object-fit: cover;
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      margin: 5px 0 10px;
-      font-size: 30px;
-    }
-
-    p {
-      color: #aeb4c0;
-      line-height: 1.7;
     }
 
     button {
       width: 100%;
-      border: none;
-      border-radius: 14px;
       padding: 15px;
-      font-size: 16px;
-      cursor: pointer;
       margin-top: 15px;
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
     }
 
     #googleLogin {
       background: white;
-      color: #111;
-    }
-
-    #logout {
-      background: #292d36;
-      color: white;
+      color: black;
     }
 
     #app {
       display: none;
-      width: 100%;
-      max-width: 600px;
-      margin: auto;
-      padding: 25px;
+      padding: 30px;
+      text-align: center;
     }
 
-    .user {
-      background: #181b22;
-      border: 1px solid #292d36;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .user img {
-      width: 55px;
-      height: 55px;
+    #userPhoto {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-      vertical-align: middle;
-      margin-left: 10px;
     }
 
-    .welcome {
-      background: #181b22;
-      border-radius: 18px;
-      padding: 25px;
+    #logout {
+      background: #292d35;
+      color: white;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- صفحه ورود -->
-  <div class="container" id="loginPage">
+  <!-- ورود -->
+  <div id="loginPage">
     <div class="card">
 
-      <img
-        src="ai.png"
-        class="logo"
-        onerror="this.style.display='none'"
-      >
+      <h1>🤖 My AI</h1>
 
-      <h1>My AI</h1>
-
-      <p>
-        به هوش مصنوعی شخصی خودت خوش آمدی 🤖
-      </p>
+      <p>برای ورود به My AI با حساب Google وارد شوید.</p>
 
       <button id="googleLogin">
-        ورود با حساب Google
+        ورود با Google
       </button>
 
     </div>
   </div>
 
 
-  <!-- برنامه بعد از ورود -->
+  <!-- برنامه -->
   <div id="app">
 
-    <div class="user">
-      <img id="userPhoto" src="" alt="">
-      <strong id="userName"></strong>
-      <p id="userEmail"></p>
+    <img id="userPhoto" src="" alt="">
 
-      <button id="logout">
-        خروج از حساب
-      </button>
-    </div>
+    <h1 id="userName"></h1>
 
-    <div class="welcome">
-      <h2>سلام 👋</h2>
-      <p>
-        ورود با موفقیت انجام شد.
-      </p>
+    <p id="userEmail"></p>
 
-      <p>
-        🚧 بخش چت در مرحله بعد ساخته می‌شود.
-      </p>
-    </div>
+    <h2>🎉 ورود موفق بود!</h2>
+
+    <button id="logout">
+      خروج
+    </button>
 
   </div>
 
@@ -167,7 +107,8 @@
     import {
       getAuth,
       GoogleAuthProvider,
-      signInWithPopup,
+      signInWithRedirect,
+      getRedirectResult,
       onAuthStateChanged,
       signOut
     }
@@ -177,55 +118,91 @@
       from "./firebase-config.js";
 
 
-    // اتصال Firebase
+    // Firebase
     const app = initializeApp(firebaseConfig);
 
-    // اتصال Authentication
     const auth = getAuth(app);
 
-    // Google
     const provider = new GoogleAuthProvider();
 
 
-    const loginPage = document.getElementById("loginPage");
-    const appPage = document.getElementById("app");
+    const loginPage =
+      document.getElementById("loginPage");
 
-    const googleLogin = document.getElementById("googleLogin");
-    const logout = document.getElementById("logout");
+    const appPage =
+      document.getElementById("app");
 
-    const userName = document.getElementById("userName");
-    const userEmail = document.getElementById("userEmail");
-    const userPhoto = document.getElementById("userPhoto");
+    const googleLogin =
+      document.getElementById("googleLogin");
+
+    const logout =
+      document.getElementById("logout");
+
+    const userName =
+      document.getElementById("userName");
+
+    const userEmail =
+      document.getElementById("userEmail");
+
+    const userPhoto =
+      document.getElementById("userPhoto");
 
 
-    // ورود با Google
+    // ورود Google
     googleLogin.addEventListener("click", async () => {
 
       try {
 
-        await signInWithPopup(auth, provider);
+        await signInWithRedirect(auth, provider);
 
       } catch (error) {
 
         console.error(error);
 
-        alert(
-          "ورود انجام نشد:\n" +
-          error.message
-        );
+        alert(error.message);
 
       }
 
     });
 
 
-    // بررسی وضعیت ورود
+    // نتیجه برگشت از Google
+    getRedirectResult(auth)
+      .then((result) => {
+
+        if (result && result.user) {
+
+          console.log(
+            "ورود موفق:",
+            result.user.email
+          );
+
+        }
+
+      })
+      .catch((error) => {
+
+        console.error(
+          "خطای ورود:",
+          error
+        );
+
+        alert(error.message);
+
+      });
+
+
+    // وضعیت حساب
     onAuthStateChanged(auth, (user) => {
 
       if (user) {
 
+        // مخفی کردن ورود
         loginPage.style.display = "none";
+
+        // نمایش برنامه
         appPage.style.display = "block";
+
 
         userName.textContent =
           user.displayName || "کاربر";
@@ -233,13 +210,18 @@
         userEmail.textContent =
           user.email || "";
 
+
         if (user.photoURL) {
-          userPhoto.src = user.photoURL;
+
+          userPhoto.src =
+            user.photoURL;
+
         }
 
       } else {
 
         loginPage.style.display = "flex";
+
         appPage.style.display = "none";
 
       }
