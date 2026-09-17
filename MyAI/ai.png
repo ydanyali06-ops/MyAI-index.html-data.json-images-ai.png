@@ -1,0 +1,40 @@
+from PIL import Image, ImageDraw, ImageFont
+
+W = H = 1024
+img = Image.new("RGB", (W, H), "#080808")
+draw = ImageDraw.Draw(img)
+
+# حلقه قرمز
+draw.ellipse((120, 120, 904, 904), outline="#ff1744", width=25)
+draw.ellipse((200, 200, 824, 824), outline="#8b001f", width=12)
+
+# دایره وسط
+draw.ellipse((300, 300, 724, 724), fill="#111111", outline="#ff1744", width=12)
+
+# نوشته AI
+font = ImageFont.truetype(
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 170
+)
+
+text = "AI"
+box = draw.textbbox((0, 0), text, font=font)
+x = (W - (box[2] - box[0])) // 2
+y = (H - (box[3] - box[1])) // 2 - 30
+
+draw.text((x, y), text, font=font, fill="#ffffff")
+
+# نام پروژه
+font2 = ImageFont.truetype(
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 70
+)
+
+text2 = "MY AI"
+box2 = draw.textbbox((0, 0), text2, font=font2)
+x2 = (W - (box2[2] - box2[0])) // 2
+
+draw.text((x2, 780), text2, font=font2, fill="#ff1744")
+
+# ذخیره
+img.save("ai.png")
+
+print("ai.png ساخته شد ✅")
