@@ -4,175 +4,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My AI</title>
-
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f1115;
-      color: white;
-    }
-
-    .page {
       min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 20px;
+      align-items: center;
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
     }
 
     .box {
-      width: 100%;
-      max-width: 420px;
-      background: #191c23;
-      padding: 28px;
+      width: 90%;
+      max-width: 400px;
+      background: #1d1d1d;
+      padding: 25px;
       border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.4);
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #aaa;
-      margin-bottom: 25px;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px;
-      margin: 7px 0;
-      border: 1px solid #343944;
-      border-radius: 12px;
-      background: #101218;
-      color: white;
-      font-size: 16px;
-      outline: none;
-    }
-
-    button {
+    input, button {
       width: 100%;
       padding: 14px;
       margin-top: 10px;
+      border-radius: 10px;
       border: 0;
-      border-radius: 12px;
+      box-sizing: border-box;
       font-size: 16px;
+    }
+
+    input {
+      background: #333;
+      color: white;
+    }
+
+    button {
+      background: #fff;
+      color: #111;
       cursor: pointer;
     }
 
-    #googleBtn {
-      background: white;
-      color: #111;
-    }
-
-    #emailLoginBtn {
-      background: #333842;
-      color: white;
-    }
-
-    #registerBtn {
-      background: #242832;
-      color: white;
-    }
-
-    #logoutBtn {
-      background: #d33;
-      color: white;
-    }
-
-    .error {
-      color: #ff7777;
-      text-align: center;
-      margin-top: 12px;
-      font-size: 14px;
-    }
-
-    #appPage {
+    #app {
       display: none;
     }
 
-    .user {
+    #message {
+      margin-top: 15px;
       text-align: center;
-    }
-
-    .user img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      margin-bottom: 10px;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Login -->
-  <div id="loginPage" class="page">
-    <div class="box">
+  <div id="login" class="box">
+    <h1>🤖 My AI</h1>
 
-      <h1>🤖 My AI</h1>
-      <div class="subtitle">ورود به حساب</div>
+    <input id="email" type="email" placeholder="ایمیل">
 
-      <button id="googleBtn">
-        🔵 ورود با Google
-      </button>
+    <input id="password" type="password" placeholder="رمز عبور">
 
-      <hr style="border-color:#333; margin:25px 0;">
+    <button id="register">ساخت حساب</button>
 
-      <input
-        id="email"
-        type="email"
-        placeholder="ایمیل"
-      >
+    <button id="loginBtn">ورود</button>
 
-      <input
-        id="password"
-        type="password"
-        placeholder="رمز عبور"
-      >
-
-      <button id="emailLoginBtn">
-        📧 ورود با ایمیل
-      </button>
-
-      <button id="registerBtn">
-        📝 ساخت حساب جدید
-      </button>
-
-      <div id="error" class="error"></div>
-
-    </div>
+    <div id="message"></div>
   </div>
 
+  <div id="app" class="box">
+    <h1>🎉 وارد شدی!</h1>
 
-  <!-- App -->
-  <div id="appPage" class="page">
-    <div class="box">
+    <p id="userEmail"></p>
 
-      <div class="user">
-
-        <img id="userPhoto"
-             src="https://via.placeholder.com/80"
-             alt="User">
-
-        <h2 id="userName">کاربر</h2>
-
-        <p id="userEmail"></p>
-
-      </div>
-
-      <button id="logoutBtn">
-        🚪 خروج از حساب
-      </button>
-
-    </div>
+    <button id="logout">خروج</button>
   </div>
 
 
@@ -183,12 +88,9 @@
 
     import {
       getAuth,
-      GoogleAuthProvider,
-      signInWithRedirect,
-      getRedirectResult,
-      onAuthStateChanged,
-      signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
       signOut
     }
       from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
@@ -197,195 +99,83 @@
       from "./firebase-config.js";
 
 
-    // Firebase
     const app = initializeApp(firebaseConfig);
-
     const auth = getAuth(app);
 
-    const provider = new GoogleAuthProvider();
+
+    const loginPage = document.getElementById("login");
+    const appPage = document.getElementById("app");
+
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+
+    const message = document.getElementById("message");
+
+    const registerBtn = document.getElementById("register");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logout");
+
+    const userEmail = document.getElementById("userEmail");
 
 
-    // Elements
-    const loginPage = document.getElementById("loginPage");
-    const appPage = document.getElementById("appPage");
+    // ساخت حساب
+    registerBtn.onclick = async () => {
 
-    const googleBtn = document.getElementById("googleBtn");
-
-    const emailLoginBtn =
-      document.getElementById("emailLoginBtn");
-
-    const registerBtn =
-      document.getElementById("registerBtn");
-
-    const logoutBtn =
-      document.getElementById("logoutBtn");
-
-    const email =
-      document.getElementById("email");
-
-    const password =
-      document.getElementById("password");
-
-    const errorBox =
-      document.getElementById("error");
-
-    const userName =
-      document.getElementById("userName");
-
-    const userEmail =
-      document.getElementById("userEmail");
-
-    const userPhoto =
-      document.getElementById("userPhoto");
-
-
-    // Error
-    function showError(error) {
-
-      console.error(error);
-
-      let message = error.message || "خطایی رخ داد.";
-
-      errorBox.textContent = message;
-    }
-
-
-    // Google Login
-    googleBtn.addEventListener("click", async () => {
-
-      errorBox.textContent = "";
-
-      try {
-
-        await signInWithRedirect(auth, provider);
-
-      } catch (error) {
-
-        showError(error);
-
-      }
-
-    });
-
-
-    // Email Login
-    emailLoginBtn.addEventListener("click", async () => {
-
-      errorBox.textContent = "";
-
-      const emailValue = email.value.trim();
-      const passwordValue = password.value;
-
-      if (!emailValue || !passwordValue) {
-
-        errorBox.textContent =
-          "ایمیل و رمز عبور را وارد کن.";
-
-        return;
-      }
-
-      try {
-
-        await signInWithEmailAndPassword(
-          auth,
-          emailValue,
-          passwordValue
-        );
-
-      } catch (error) {
-
-        showError(error);
-
-      }
-
-    });
-
-
-    // Register
-    registerBtn.addEventListener("click", async () => {
-
-      errorBox.textContent = "";
-
-      const emailValue = email.value.trim();
-      const passwordValue = password.value;
-
-      if (!emailValue || !passwordValue) {
-
-        errorBox.textContent =
-          "ایمیل و رمز عبور را وارد کن.";
-
-        return;
-      }
-
-      if (passwordValue.length < 6) {
-
-        errorBox.textContent =
-          "رمز عبور باید حداقل ۶ کاراکتر باشد.";
-
-        return;
-      }
+      message.textContent = "";
 
       try {
 
         await createUserWithEmailAndPassword(
           auth,
-          emailValue,
-          passwordValue
+          email.value.trim(),
+          password.value
         );
 
       } catch (error) {
 
-        showError(error);
+        message.textContent = error.message;
 
       }
 
-    });
+    };
 
 
-    // Google redirect result
-    getRedirectResult(auth)
-      .then((result) => {
+    // ورود
+    loginBtn.onclick = async () => {
 
-        if (result && result.user) {
+      message.textContent = "";
 
-          console.log(
-            "Google login موفق:",
-            result.user.email
-          );
+      try {
 
-        }
+        await signInWithEmailAndPassword(
+          auth,
+          email.value.trim(),
+          password.value
+        );
 
-      })
-      .catch((error) => {
+      } catch (error) {
 
-        showError(error);
+        message.textContent = error.message;
 
-      });
+      }
+
+    };
 
 
-    // Auth state
+    // وضعیت کاربر
     onAuthStateChanged(auth, (user) => {
 
       if (user) {
 
         loginPage.style.display = "none";
-        appPage.style.display = "flex";
-
-        userName.textContent =
-          user.displayName || "کاربر";
+        appPage.style.display = "block";
 
         userEmail.textContent =
-          user.email || "";
-
-        if (user.photoURL) {
-
-          userPhoto.src = user.photoURL;
-
-        }
+          "ایمیل: " + user.email;
 
       } else {
 
-        loginPage.style.display = "flex";
+        loginPage.style.display = "block";
         appPage.style.display = "none";
 
       }
@@ -393,20 +183,12 @@
     });
 
 
-    // Logout
-    logoutBtn.addEventListener("click", async () => {
+    // خروج
+    logoutBtn.onclick = async () => {
 
-      try {
+      await signOut(auth);
 
-        await signOut(auth);
-
-      } catch (error) {
-
-        showError(error);
-
-      }
-
-    });
+    };
 
   </script>
 
