@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My AI</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#080808;
+  color:white;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  height:70px;
+  display:flex;
+  align-items:center;
+  padding:10px 18px;
+  background:#101010;
+  border-bottom:1px solid #292929;
+}
+
+.logo{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  border:2px solid #ff2020;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  color:#ff3030;
+  margin-left:12px;
+  box-shadow:0 0 15px #ff202055;
+}
+
+.title{
+  font-size:21px;
+  font-weight:bold;
+}
+
+.status{
+  margin-right:auto;
+  color:#28e66b;
+  font-size:13px;
+}
+
+#chat{
+  height:calc(100vh - 140px);
+  overflow-y:auto;
+  padding:18px;
+}
+
+.message{
+  max-width:85%;
+  padding:12px 15px;
+  margin:10px 0;
+  border-radius:16px;
+  line-height:1.8;
+  white-space:pre-wrap;
+  word-wrap:break-word;
+}
+
+.ai{
+  background:#171717;
+  border:1px solid #292929;
+  margin-left:auto;
+}
+
+.user{
+  background:#b80000;
+  margin-right:auto;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:70px;
+  padding:10px;
+  background:#101010;
+  display:flex;
+  gap:8px;
+  border-top:1px solid #292929;
+}
+
+input{
+  flex:1;
+  background:#1b1b1b;
+  border:1px solid #333;
+  border-radius:14px;
+  color:white;
+  padding:0 15px;
+  outline:none;
+  font-size:15px;
+}
+
+input:focus{
+  border-color:#e00000;
+}
+
+button{
+  width:65px;
+  border:0;
+  border-radius:14px;
+  background:#e00000;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+}
+
+button:active{
+  transform:scale(.95);
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  margin-top:35vh;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">AI</div>
+
+  <div class="title">
+    MY AI
+  </div>
+
+  <div class="status" id="status">
+    در حال آماده‌سازی...
+  </div>
+</header>
+
+<div id="chat">
+  <div class="empty" id="empty">
+    🧠 در حال بارگذاری مغز AI...
+  </div>
+</div>
+
+<div class="bottom">
+  <input
+    id="input"
+    type="text"
+    placeholder="پیامت را بنویس..."
+    autocomplete="off"
+  >
+
+  <button onclick="sendMessage()">➤</button>
+</div>
+
+<script>
+
+let brain = {};
+
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+const statusText = document.getElementById("status");
+const empty = document.getElementById("empty");
+
+
+/* -------------------------
+   بارگذاری data.json
+------------------------- */
+
+async function loadBrain(){
+
+  try{
+
+    const response = await fetch("data.json");
+
+    if(!response.ok){
+      throw new Error("data.json پیدا نشد");
+    }
+
+    brain = await response.json();
+
+    statusText.textContent =
+      "● آماده | " + Object.keys(brain).length + " پاسخ";
+
+    empty.remove();
+
+    addMessage(
+      "🧠 مغز من آماده شد!\n" +
+      Object.keys(brain).length +
+      " سؤال و جواب از data.json یاد گرفتم.",
+      "ai"
+    );
+
+  }catch(error){
+
+    statusText.textContent = "● خطا";
+
+    empty.textContent =
+      "⚠️ فایل data.json پیدا نشد.";
+
+  }
+
+}
+
+
+/* -------------------------
+   اضافه کردن پیام
+------------------------- */
+
+function addMessage(text,type){
+
+  const message = document.createElement("div");
+
+  message.className =
+    "message " + type;
+
+  message.textContent = text;
+
+  chat.appendChild(message);
+
+  chat.scrollTop = chat.scrollHeight;
+}
+
+
+/* -------------------------
+   تمیز کردن متن
+------------------------- */
+
+function cleanText(text){
+
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[؟?!.,،]/g,"")
+    .replace(/\s+/g," ");
+
+}
+
+
+/* -------------------------
+   پیدا کردن جواب
+------------------------- */
+
+function findAnswer(question){
+
+  const q = cleanText(question);
+
+  const keys = Object.keys(brain);
+
+
+  /* جواب دقیق */
+
+  for(const key of keys){
+
+    if(cleanText(key) === q){
+
+      return brain[key];
+
+    }
+
+  }
+
+
+  /* اگر سؤال شامل کلید بود */
+
+  for(const key of keys){
+
+    const k = cleanText(key);
+
+    if(
+      q.includes(k) ||
+      k.includes(q)
+    ){
+
+      return brain[key];
+
+    }
+
+  }
+
+
+  return null;
+}
+
+
+/* -------------------------
+   ارسال پیام
+------------------------- */
+
+function sendMessage(){
+
+  const text = input.value.trim();
+
+  if(!text) return;
+
+  addMessage(text,"user");
+
+  input.value = "";
+
+  setTimeout(()=>{
+
+    const answer = findAnswer(text);
+
+    if(answer){
+
+      addMessage(answer,"ai");
+
+    }else{
+
+      addMessage(
+        "🤔 این سؤال را هنوز بلد نیستم.\n\n" +
+        "می‌توانی آن را به data.json اضافه کنی.",
+        "ai"
+      );
+
+    }
+
+  },300);
+
+}
+
+
+/* -------------------------
+   Enter
+------------------------- */
+
+input.addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Enter"){
+
+      sendMessage();
+
+    }
+
+  }
+);
+
+
+/* -------------------------
+   شروع AI
+------------------------- */
+
+loadBrain();
+
+</script>
+
+</body>
+</html>
