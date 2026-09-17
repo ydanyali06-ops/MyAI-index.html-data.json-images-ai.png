@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My AI</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#080808;
+  color:white;
+  font-family:Arial,sans-serif;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:18px;
+  background:#101010;
+  border-bottom:1px solid #292929;
+}
+
+/* لوگوی ساخته‌شده با خود HTML */
+.logo{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:#111;
+  border:3px solid #ff1744;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:
+    0 0 10px #ff1744,
+    0 0 25px rgba(255,23,68,.35);
+  position:relative;
+}
+
+.logo::before{
+  content:"";
+  position:absolute;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:2px solid #8b001f;
+}
+
+.logo span{
+  position:relative;
+  z-index:2;
+  font-size:18px;
+  font-weight:bold;
+  color:white;
+  letter-spacing:-1px;
+}
+
+.title{
+  font-size:23px;
+  font-weight:bold;
+}
+
+.status{
+  font-size:12px;
+  color:#ff1744;
+  margin-top:4px;
+}
+
+#chat{
+  height:calc(100vh - 155px);
+  overflow-y:auto;
+  padding:15px;
+}
+
+.msg{
+  max-width:85%;
+  padding:12px 15px;
+  margin:8px 0;
+  border-radius:16px;
+  white-space:pre-wrap;
+  line-height:1.7;
+}
+
+.ai{
+  background:#171717;
+  border:1px solid #292929;
+  margin-left:auto;
+}
+
+.user{
+  background:#ff1744;
+  color:white;
+  margin-right:auto;
+}
+
+.inputArea{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:10px;
+  background:#101010;
+  display:flex;
+  gap:8px;
+}
+
+#input{
+  flex:1;
+  padding:13px;
+  border:0;
+  outline:0;
+  border-radius:12px;
+  background:#202020;
+  color:white;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:0 15px;
+  background:#ff1744;
+  color:white;
+  font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+  <!-- لوگو بدون ai.png -->
+  <div class="logo">
+    <span>AI</span>
+  </div>
+
+  <div>
+    <div class="title">MY AI</div>
+    <div class="status" id="status">● در حال آماده‌سازی...</div>
+  </div>
+
+</div>
+
+<div id="chat"></div>
+
+<div class="inputArea">
+  <input id="input" placeholder="پیامت را بنویس..." />
+  <button onclick="send()">➤</button>
+</div>
+
+<script>
+
+let brain = {};
+let learned = JSON.parse(localStorage.getItem("myAI_learned") || "{}");
+
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+
+function addMessage(text,type){
+  const div=document.createElement("div");
+  div.className="msg "+type;
+  div.textContent=text;
+  chat.appendChild(div);
+  chat.scrollTop=chat.scrollHeight;
+}
+
+async function loadBrain(){
+
+  try{
+
+    const response=await fetch("data.json");
+
+    if(!response.ok){
+      throw new Error("data.json not found");
+    }
+
+    brain=await response.json();
+
+    document.getElementById("status").textContent=
+      "● آماده | "+Object.keys(brain).length+" اطلاعات";
+
+    addMessage(
+      "🧠 مغز من آماده شد!\n"+
+      Object.keys(brain).length+
+      " اطلاعات از data.json بارگذاری شد.",
+      "ai"
+    );
+
+  }catch(error){
+
+    document.getElementById("status").textContent=
+      "● بدون data.json";
+
+    addMessage(
+      "سلام! 👋\n"+
+      "مغز اصلی من هنوز بارگذاری نشده.",
+      "ai"
+    );
+
+  }
+}
+
+function findAnswer(q){
+
+  q=q.trim().toLowerCase();
+
+  // حافظه یادگرفته‌شده
+  if(learned[q]){
+    return learned[q];
+  }
+
+  // مغز اصلی
+  if(brain[q]){
+    return brain[q];
+  }
+
+  // جستجوی تقریبی
+  for(const key in learned){
+    if(q.includes(key) || key.includes(q)){
+      return learned[key];
+    }
+  }
+
+  for(const key in brain){
+    if(q.includes(key) || key.includes(q)){
+      return brain[key];
+    }
+  }
+
+  return null;
+}
+
+function send(){
+
+  const q=input.value.trim();
+
+  if(!q) return;
+
+  addMessage(q,"user");
+  input.value="";
+
+  // یادگیری
+  if(q.startsWith("یاد بگیر:")){
+
+    const data=q.replace("یاد بگیر:","").trim();
+    const parts=data.split("|");
+
+    if(parts.length>=2){
+
+      const question=parts[0].trim().toLowerCase();
+      const answer=parts.slice(1).join("|").trim();
+
+      learned[question]=answer;
+
+      localStorage.setItem(
+        "myAI_learned",
+        JSON.stringify(learned)
+      );
+
+      addMessage("🧠 یاد گرفتم!","ai");
+      return;
+    }
+  }
+
+  // پاک کردن حافظه
+  if(q==="/clear"){
+
+    learned={};
+
+    localStorage.removeItem("myAI_learned");
+
+    addMessage("🗑️ حافظه پاک شد.","ai");
+    return;
+  }
+
+  // نمایش حافظه
+  if(q==="/memory"){
+
+    const count=Object.keys(learned).length;
+
+    addMessage(
+      "🧠 تعداد چیزهایی که یاد گرفته‌ام: "+count,
+      "ai"
+    );
+
+    return;
+  }
+
+  // کمک
+  if(q==="/help"){
+
+    addMessage(
+      "دستورها:\n\n"+
+      "یاد بگیر: سؤال | جواب\n"+
+      "/memory\n"+
+      "/clear\n"+
+      "/help",
+      "ai"
+    );
+
+    return;
+  }
+
+  // ماشین حساب ساده
+  if(/^[0-9+\-*/().\s]+$/.test(q)){
+
+    try{
+
+      const result=Function(
+        '"use strict";return ('+q+')'
+      )();
+
+      addMessage("🧮 "+result,"ai");
+      return;
+
+    }catch(e){}
+
+  }
+
+  const answer=findAnswer(q);
+
+  if(answer){
+
+    addMessage(answer,"ai");
+
+  }else{
+
+    addMessage(
+      "🤖 هنوز جواب این سؤال را نمی‌دانم.\n"+
+      "می‌توانی به من یاد بدهی:\n\n"+
+      "یاد بگیر: "+q+" | جواب",
+      "ai"
+    );
+
+  }
+}
+
+input.addEventListener("keydown",function(e){
+
+  if(e.key==="Enter"){
+    send();
+  }
+
+});
+
+loadBrain();
+
+</script>
+
+</body>
+</html>
