@@ -20,7 +20,7 @@ header{
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#f00;
+  color:#ff0000;
   font-size:25px;
   font-weight:bold;
   border-bottom:1px solid #333;
@@ -30,6 +30,7 @@ header{
   height:calc(100vh - 140px);
   overflow-y:auto;
   padding:15px;
+  padding-bottom:25px;
 }
 
 .message{
@@ -106,13 +107,14 @@ header{
     placeholder="پیامت را بنویس..."
     autocomplete="off"
   >
+
   <button id="send">ارسال</button>
 </div>
 
 <script>
 
 const WORKER_URL =
-"https://old-fire-5f7e.ydanyali95.workers.dev/";
+"https://broad-resonance-8060.ydanyali95.workers.dev/";
 
 const input = document.getElementById("input");
 const send = document.getElementById("send");
