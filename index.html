@@ -1,117 +1,207 @@
-export default {
-  async fetch(request, env) {
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My AI</title>
 
-    const cors = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type"
-    };
+<style>
+*{box-sizing:border-box}
 
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
-        status: 204,
-        headers: cors
-      });
+body{
+  margin:0;
+  background:#050505;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  height:65px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#f00;
+  font-size:25px;
+  font-weight:bold;
+  border-bottom:1px solid #333;
+}
+
+#chat{
+  height:calc(100vh - 140px);
+  overflow-y:auto;
+  padding:15px;
+}
+
+.message{
+  max-width:85%;
+  padding:12px 15px;
+  margin:10px 0;
+  border-radius:16px;
+  white-space:pre-wrap;
+  word-break:break-word;
+  line-height:1.7;
+}
+
+.user{
+  background:#350000;
+  margin-right:auto;
+}
+
+.ai{
+  background:#181818;
+  margin-left:auto;
+}
+
+#box{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:75px;
+  padding:10px;
+  display:flex;
+  gap:8px;
+  background:#090909;
+  border-top:1px solid #333;
+}
+
+#input{
+  flex:1;
+  min-width:0;
+  padding:13px;
+  border-radius:13px;
+  border:1px solid #555;
+  outline:none;
+  background:#111;
+  color:#fff;
+  font-size:16px;
+}
+
+#send{
+  width:75px;
+  border:0;
+  border-radius:13px;
+  background:#e00000;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+}
+
+#send:disabled{
+  opacity:.5;
+}
+</style>
+</head>
+
+<body>
+
+<header>My AI 🤖</header>
+
+<div id="chat"></div>
+
+<div id="box">
+  <input
+    id="input"
+    type="text"
+    placeholder="پیامت را بنویس..."
+    autocomplete="off"
+  >
+  <button id="send">ارسال</button>
+</div>
+
+<script>
+
+const WORKER_URL =
+"https://old-fire-5f7e.ydanyali95.workers.dev/";
+
+const input = document.getElementById("input");
+const send = document.getElementById("send");
+const chat = document.getElementById("chat");
+
+function addMessage(text,type){
+
+  const message = document.createElement("div");
+
+  message.className = "message " + type;
+  message.textContent = text;
+
+  chat.appendChild(message);
+  chat.scrollTop = chat.scrollHeight;
+
+  return message;
+}
+
+async function sendMessage(){
+
+  const message = input.value.trim();
+
+  if(!message) return;
+
+  addMessage(message,"user");
+
+  input.value = "";
+  send.disabled = true;
+
+  const aiMessage =
+    addMessage("در حال فکر کردن... 🤖","ai");
+
+  try{
+
+    const response = await fetch(WORKER_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        message:message
+      })
+    });
+
+    const data = await response.json();
+
+    if(data.reply){
+
+      aiMessage.textContent = data.reply;
+
+    }else if(data.error){
+
+      aiMessage.textContent =
+        "خطا: " +
+        (typeof data.error === "string"
+          ? data.error
+          : JSON.stringify(data.error));
+
+    }else{
+
+      aiMessage.textContent =
+        "پاسخی از AI دریافت نشد.";
+
     }
 
-    if (request.method !== "POST") {
-      return new Response(
-        JSON.stringify({
-          error: "Use POST"
-        }),
-        {
-          status: 405,
-          headers: {
-            "Content-Type": "application/json",
-            ...cors
-          }
-        }
-      );
-    }
+  }catch(error){
 
-    try {
+    aiMessage.textContent =
+      "خطا در اتصال ❌\n" + error.message;
 
-      const body = await request.json();
+  }finally{
 
-      if (!body.message) {
-        return new Response(
-          JSON.stringify({
-            error: "message is required"
-          }),
-          {
-            status: 400,
-            headers: {
-              "Content-Type": "application/json",
-              ...cors
-            }
-          }
-        );
-      }
+    send.disabled = false;
+    input.focus();
 
-      const openaiResponse = await fetch(
-        "https://api.openai.com/v1/responses",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + env.OPENAI_API_KEY
-          },
-
-          body: JSON.stringify({
-            model: "gpt-5-mini",
-            input: body.message
-          })
-        }
-      );
-
-      const data = await openaiResponse.json();
-
-      if (!openaiResponse.ok) {
-
-        return new Response(
-          JSON.stringify({
-            error:
-              data?.error?.message ||
-              "OpenAI API error"
-          }),
-          {
-            status: openaiResponse.status,
-            headers: {
-              "Content-Type": "application/json",
-              ...cors
-            }
-          }
-        );
-      }
-
-      return new Response(
-        JSON.stringify({
-          reply: data.output_text || "پاسخی دریافت نشد."
-        }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-            ...cors
-          }
-        }
-      );
-
-    } catch (error) {
-
-      return new Response(
-        JSON.stringify({
-          error: error.message
-        }),
-        {
-          status: 500,
-          headers: {
-            "Content-Type": "application/json",
-            ...cors
-          }
-        }
-      );
-    }
   }
-};
+}
+
+send.addEventListener("click",sendMessage);
+
+input.addEventListener("keydown",(event)=>{
+
+  if(event.key === "Enter"){
+    sendMessage();
+  }
+
+});
+
+</script>
+
+</body>
+</html>
