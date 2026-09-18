@@ -1,206 +1,134 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My AI</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+body {
+  margin: 0;
+  background: #050505;
+  color: white;
+  font-family: Arial;
+}
 
-    body {
-      margin: 0;
-      height: 100dvh;
-      background: #080808;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-    }
+h1 {
+  text-align: center;
+  color: #ff0000;
+}
 
-    header {
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #111;
-      border-bottom: 1px solid #333;
-      color: #ff2020;
-      font-size: 24px;
-      font-weight: bold;
-    }
+#chat {
+  height: 75vh;
+  overflow-y: auto;
+  padding: 15px;
+}
 
-    #chat {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-    }
+.message {
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+}
 
-    .message {
-      max-width: 85%;
-      padding: 12px 15px;
-      margin-bottom: 12px;
-      border-radius: 16px;
-      line-height: 1.7;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
+.user {
+  background: #350000;
+}
 
-    .user {
-      margin-left: auto;
-      background: #292929;
-    }
+.ai {
+  background: #181818;
+}
 
-    .ai {
-      margin-right: auto;
-      background: #3d1010;
-      border: 1px solid #8d2020;
-    }
+#box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  background: #090909;
+  display: flex;
+  gap: 8px;
+}
 
-    #form {
-      display: flex;
-      gap: 8px;
-      padding: 12px;
-      background: #111;
-      border-top: 1px solid #333;
-    }
+#input {
+  flex: 1;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid #555;
+  background: #111;
+  color: white;
+}
 
-    #message {
-      flex: 1;
-      min-width: 0;
-      height: 50px;
-      padding: 0 15px;
-      border-radius: 14px;
-      border: 1px solid #444;
-      background: #202020;
-      color: white;
-      font-size: 16px;
-      outline: none;
-    }
-
-    #send {
-      width: 75px;
-      border: 0;
-      border-radius: 14px;
-      background: #e32636;
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-    #send:disabled {
-      opacity: 0.5;
-    }
-  </style>
+button {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: red;
+  color: white;
+}
+</style>
 </head>
 
 <body>
 
-<header>🔴 My AI</header>
+<h1>My AI 🤖</h1>
 
-<div id="chat">
-  <div class="message ai">سلام! من My AI هستم 👋</div>
+<div id="chat"></div>
+
+<div id="box">
+<input id="input" placeholder="پیامت را بنویس">
+<button id="send">ارسال</button>
 </div>
-
-<form id="form">
-
-  <input
-    id="message"
-    type="text"
-    placeholder="پیامت را بنویس..."
-    autocomplete="off"
-    required
-  >
-
-  <button id="send" type="submit">ارسال</button>
-
-</form>
 
 <script>
 
 const WORKER_URL =
 "https://old-fire-5f7e.ydanyani95.workers.dev/";
 
-const form = document.getElementById("form");
-const input = document.getElementById("message");
+const input = document.getElementById("input");
 const send = document.getElementById("send");
 const chat = document.getElementById("chat");
 
-function addMessage(text, type) {
+send.onclick = async function () {
 
-  const div = document.createElement("div");
+  const message = input.value.trim();
 
-  div.className = "message " + type;
-  div.textContent = text;
+  if (!message) return;
 
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-
-  return div;
-}
-
-form.addEventListener("submit", async (event) => {
-
-  event.preventDefault();
-
-  const text = input.value.trim();
-
-  if (!text) return;
-
-  addMessage(text, "user");
+  chat.innerHTML +=
+    '<div class="message user">' +
+    message +
+    '</div>';
 
   input.value = "";
-  send.disabled = true;
 
-  const answer = addMessage(
-    "⏳ در حال فکر کردن...",
-    "ai"
-  );
+  chat.innerHTML +=
+    '<div class="message ai" id="loading">در حال ارسال...</div>';
 
   try {
 
     const response = await fetch(WORKER_URL, {
-
       method: "POST",
-
       headers: {
         "Content-Type": "application/json"
       },
-
       body: JSON.stringify({
-        message: text
+        message: message
       })
-
     });
 
     const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(
-        data.error?.message ||
-        data.error ||
-        "خطای سرور"
-      );
-    }
-
-    answer.textContent =
-      data.reply || "پاسخی دریافت نشد.";
+    document.getElementById("loading").textContent =
+      data.reply || data.error || "پاسخی دریافت نشد.";
 
   } catch (error) {
 
-    answer.textContent =
-      "❌ خطا:\n" + error.message;
-
-  } finally {
-
-    send.disabled = false;
-    input.focus();
+    document.getElementById("loading").textContent =
+      "Failed to fetch ❌";
 
   }
 
-});
+};
 
 </script>
 
