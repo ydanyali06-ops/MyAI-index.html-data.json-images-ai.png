@@ -1,36 +1,117 @@
-const { onRequest } = require("firebase-functions/v2/https");
-const OpenAI = require("openai");
+export default {
+  async fetch(request, env) {
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+    const cors = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type"
+    };
 
-exports.chat = onRequest(async (req, res) => {
-  try {
-    if (req.method !== "POST") {
-      return res.status(405).json({ error: "Only POST is allowed" });
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: cors
+      });
     }
 
-    const message = req.body?.message;
-
-    if (!message) {
-      return res.status(400).json({ error: "Message is required" });
+    if (request.method !== "POST") {
+      return new Response(
+        JSON.stringify({
+          error: "Use POST"
+        }),
+        {
+          status: 405,
+          headers: {
+            "Content-Type": "application/json",
+            ...cors
+          }
+        }
+      );
     }
 
-    const response = await client.responses.create({
-      model: "gpt-5.6-luna",
-      input: message
-    });
+    try {
 
-    res.json({
-      reply: response.output_text
-    });
+      const body = await request.json();
 
-  } catch (error) {
-    console.error(error);
+      if (!body.message) {
+        return new Response(
+          JSON.stringify({
+            error: "message is required"
+          }),
+          {
+            status: 400,
+            headers: {
+              "Content-Type": "application/json",
+              ...cors
+            }
+          }
+        );
+      }
 
-    res.status(500).json({
-      error: "AI request failed"
-    });
+      const openaiResponse = await fetch(
+        "https://api.openai.com/v1/responses",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":
+              "Bearer " + env.OPENAI_API_KEY
+          },
+          body: JSON.stringify({
+            model: "gpt-5-mini",
+            input: body.message
+          })
+        }
+      );
+
+      const data = await openaiResponse.json();
+
+      if (!openaiResponse.ok) {
+        return new Response(
+          JSON.stringify({
+            error:
+              data?.error?.message ||
+              "OpenAI API error"
+          }),
+          {
+            status: openaiResponse.status,
+            headers: {
+              "Content-Type": "application/json",
+              ...cors
+            }
+          }
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          reply:
+            data.output_text ||
+            "پاسخی دریافت نشد."
+        }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            ...cors
+          }
+        }
+      );
+
+    } catch (error) {
+
+      return new Response(
+        JSON.stringify({
+          error: error.message
+        }),
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+            ...cors
+          }
+        }
+      );
+    }
   }
-});
+};
