@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zivo | فروشگاه زیوو</title>
-    <!-- Tailwind CSS -->
+    <title>Zivo | زیوو</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://v1.fontapi.ir/css/Vazir');
         body { 
             font-family: 'Vazir', sans-serif;
-            background: #0f172a;
+            background-color: #0f172a;
             color: #f8fafc;
             min-height: 100vh;
         }
@@ -44,14 +42,13 @@
             <!-- Header Actions / Buttons -->
             <div class="flex items-center gap-2">
                 <!-- Profile / Auth Button -->
-                <button id="authBtn" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/10 flex items-center justify-center text-blue-400 transition active:scale-95" title="ورود / حساب کاربری">
+                <button onclick="handleProfileClick()" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center text-blue-400 transition active:scale-90 cursor-pointer" title="ورود / حساب کاربری">
                     <i class="fa-solid fa-user text-lg"></i>
                 </button>
 
                 <!-- Favorites Button -->
-                <button id="favBtn" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/10 flex items-center justify-center text-rose-500 transition relative active:scale-95" title="علاقه‌مندی‌ها">
+                <button onclick="handleFavClick()" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center text-rose-500 transition active:scale-90 cursor-pointer" title="علاقه‌مندی‌ها">
                     <i class="fa-solid fa-heart text-lg"></i>
-                    <span id="favBadge" class="absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
                 </button>
             </div>
         </div>
@@ -76,20 +73,19 @@
             </div>
             <div class="flex gap-2">
                 <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." class="flex-1 px-4 py-2.5 rounded-xl glass text-sm focus:outline-none text-white">
-                <button id="sendChatBtn" type="button" class="bg-rose-600 hover:bg-rose-700 text-white px-4 rounded-xl flex items-center justify-center transition active:scale-95">
+                <button onclick="handleSendMessage()" type="button" class="bg-rose-600 hover:bg-rose-700 text-white px-4 rounded-xl flex items-center justify-center transition active:scale-90 cursor-pointer">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Products Section Header -->
+        <!-- Section Header -->
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-bold flex items-center gap-2">
                 <i class="fa-solid fa-store text-rose-500"></i> لیست آگهی‌ها
             </h2>
         </div>
 
-        <!-- Products Container (empty, ready for dynamic Firestore ads) -->
         <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <div class="col-span-full text-center py-12 glass-card rounded-2xl text-gray-400 text-sm">
                 هیچ آگهی ثبت نشده است.
@@ -97,75 +93,24 @@
         </div>
     </main>
 
-    <!-- JavaScript Execution -->
+    <!-- Inline JavaScript Functions -->
     <script>
-        // 1. Favorites Handler
-        const favBtn = document.getElementById('favBtn');
-        const favBadge = document.getElementById('favBadge');
-        let favoritesCount = 0;
+        function handleProfileClick() {
+            alert("دکمه پروفایل کلیک شد!");
+        }
 
-        favBtn.addEventListener('click', () => {
-            alert(`تعداد آگهی‌های مورد علاقه شما: ${favoritesCount}`);
-        });
+        function handleFavClick() {
+            alert("دکمه علاقه‌مندی‌ها کلیک شد!");
+        }
 
-        // 2. Chat Assistant Handler
-        const sendChatBtn = document.getElementById('sendChatBtn');
-        const chatInput = document.getElementById('chatInput');
-
-        sendChatBtn.addEventListener('click', () => {
-            const msg = chatInput.value.trim();
-            if (msg) {
-                alert(`پیام شما دریافت شد: ${msg}`);
-                chatInput.value = '';
-            }
-        });
-
-        // 3. Auth Button Handler
-        const authBtn = document.getElementById('authBtn');
-        authBtn.addEventListener('click', () => {
-            if (window.firebaseAuth) {
-                window.triggerGoogleLogin();
+        function handleSendMessage() {
+            const input = document.getElementById('chatInput');
+            if (input && input.value.trim() !== "") {
+                alert("پیام شما: " + input.value);
+                input.value = "";
             } else {
-                alert("در حال اتصال به سیستم فایربیس... لطفاً لحظاتی بعد مجدداً تلاش کنید.");
+                alert("لطفاً پیامی بنویسید.");
             }
-        });
-    </script>
-
-    <!-- Firebase Integration -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        // تنظیمات فایربیس شما
-        const firebaseConfig = {
-            authDomain: "myai-bd693.firebaseapp.com",
-            projectId: "myai-bd693",
-            storageBucket: "myai-bd693.appspot.com"
-        };
-
-        try {
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const provider = new GoogleAuthProvider();
-
-            window.firebaseAuth = auth;
-            window.triggerGoogleLogin = async () => {
-                try {
-                    const result = await signInWithPopup(auth, provider);
-                    alert(`خوش آمدید ${result.user.displayName || 'کاربر گرامی'}`);
-                } catch (err) {
-                    console.error(err);
-                    alert("خطا در ورود: " + err.message);
-                }
-            };
-
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    authBtn.classList.add('border-2', 'border-green-500');
-                }
-            });
-        } catch (e) {
-            console.error("Firebase Init Error:", e);
         }
     </script>
 </body>
