@@ -1,870 +1,204 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#090909" />
-  <title>Zivo — خرید و فروش آنلاین</title>
-
-  <style>
-    :root {
-      --bg:#070707;
-      --bg2:#101010;
-      --card:#141414;
-      --card2:#1b1b1b;
-      --text:#fff;
-      --muted:#999;
-      --border:#292929;
-      --red:#ff1744;
-      --red2:#d50032;
-      --green:#20d77a;
-      --shadow:0 12px 35px rgba(0,0,0,.35);
-      --radius:18px;
-    }
-
-    body.light {
-      --bg:#f4f4f5;
-      --bg2:#fff;
-      --card:#fff;
-      --card2:#f2f2f3;
-      --text:#111;
-      --muted:#666;
-      --border:#dedede;
-      --shadow:0 10px 30px rgba(0,0,0,.1);
-    }
-
-    * {
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-      font-family:Arial,Tahoma,sans-serif;
-    }
-
-    body {
-      background:var(--bg);
-      color:var(--text);
-      min-height:100vh;
-      transition:.25s;
-    }
-
-    button,input,textarea,select {
-      font:inherit;
-    }
-
-    button {
-      cursor:pointer;
-    }
-
-    a {
-      color:inherit;
-      text-decoration:none;
-    }
-
-    .container {
-      width:min(1200px,94%);
-      margin:auto;
-    }
-
-    header {
-      position:sticky;
-      top:0;
-      z-index:1000;
-      background:rgba(7,7,7,.9);
-      backdrop-filter:blur(18px);
-      border-bottom:1px solid var(--border);
-    }
-
-    body.light header {
-      background:rgba(255,255,255,.9);
-    }
-
-    .header-inner {
-      min-height:72px;
-      display:flex;
-      align-items:center;
-      gap:18px;
-    }
-
-    .logo {
-      display:flex;
-      align-items:center;
-      gap:9px;
-      font-size:25px;
-      font-weight:900;
-      min-width:100px;
-    }
-
-    .logo-mark {
-      width:39px;
-      height:39px;
-      border-radius:12px;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(145deg,#ff1744,#8e0025);
-      box-shadow:0 0 25px rgba(255,23,68,.35);
-      font-weight:900;
-      color:#fff;
-    }
-
-    .search-box {
-      flex:1;
-      position:relative;
-    }
-
-    .search-box input {
-      width:100%;
-      height:45px;
-      border:1px solid var(--border);
-      background:var(--card);
-      color:var(--text);
-      border-radius:14px;
-      padding:0 45px 0 15px;
-      outline:none;
-    }
-
-    .search-box input:focus {
-      border-color:var(--red);
-      box-shadow:0 0 0 3px rgba(255,23,68,.1);
-    }
-
-    .search-icon {
-      position:absolute;
-      right:15px;
-      top:12px;
-      opacity:.7;
-    }
-
-    .header-actions {
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-
-    .icon-btn {
-      width:42px;
-      height:42px;
-      border:1px solid var(--border);
-      background:var(--card);
-      color:var(--text);
-      border-radius:13px;
-      font-size:18px;
-      display:grid;
-      place-items:center;
-    }
-
-    .icon-btn:hover {
-      border-color:var(--red);
-      color:var(--red);
-    }
-
-    .sell-btn,
-    .primary-btn {
-      border:none;
-      background:linear-gradient(135deg,var(--red),var(--red2));
-      color:white;
-      border-radius:13px;
-      padding:12px 17px;
-      font-weight:800;
-      box-shadow:0 8px 22px rgba(255,23,68,.2);
-    }
-
-    .sell-btn:hover,
-    .primary-btn:hover {
-      transform:translateY(-1px);
-      filter:brightness(1.08);
-    }
-
-    .hero {
-      margin:28px auto;
-      min-height:330px;
-      border:1px solid var(--border);
-      border-radius:28px;
-      overflow:hidden;
-      position:relative;
-      background:
-        linear-gradient(90deg,rgba(0,0,0,.92),rgba(0,0,0,.35)),
-        url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=85")
-        center/cover;
-      display:flex;
-      align-items:center;
-    }
-
-    .hero-content {
-      padding:40px;
-      max-width:650px;
-    }
-
-    .hero-badge {
-      display:inline-block;
-      background:rgba(255,23,68,.15);
-      color:#ff4b6d;
-      border:1px solid rgba(255,23,68,.3);
-      padding:7px 12px;
-      border-radius:30px;
-      margin-bottom:15px;
-      font-size:13px;
-    }
-
-    .hero h1 {
-      font-size:clamp(35px,6vw,65px);
-      line-height:1;
-      margin-bottom:18px;
-      color:#fff;
-    }
-
-    .hero h1 span {
-      color:var(--red);
-    }
-
-    .hero p {
-      color:#ddd;
-      line-height:1.9;
-      margin-bottom:25px;
-    }
-
-    .hero-buttons {
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .secondary-btn {
-      padding:12px 17px;
-      border:1px solid #555;
-      border-radius:13px;
-      color:var(--text);
-      background:var(--card2);
-    }
-
-    section {
-      margin:42px 0;
-    }
-
-    .section-head {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:18px;
-      gap:10px;
-    }
-
-    .section-head h2 {
-      font-size:24px;
-    }
-
-    .section-head small {
-      color:var(--muted);
-    }
-
-    .categories {
-      display:grid;
-      grid-template-columns:repeat(6,1fr);
-      gap:12px;
-    }
-
-    .category {
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:20px 10px;
-      text-align:center;
-      transition:.2s;
-      cursor:pointer;
-    }
-
-    .category:hover,
-    .category.active {
-      border-color:var(--red);
-      transform:translateY(-3px);
-    }
-
-    .category-icon {
-      font-size:30px;
-      margin-bottom:9px;
-    }
-
-    .category-name {
-      font-size:14px;
-      font-weight:bold;
-    }
-
-    .products {
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:16px;
-    }
-
-    .product {
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      overflow:hidden;
-      transition:.2s;
-      position:relative;
-    }
-
-    .product:hover {
-      transform:translateY(-4px);
-      border-color:#444;
-      box-shadow:var(--shadow);
-    }
-
-    .product-image {
-      height:210px;
-      position:relative;
-      overflow:hidden;
-      background:#222;
-    }
-
-    .product-image img {
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      transition:.35s;
-    }
-
-    .product:hover img {
-      transform:scale(1.05);
-    }
-
-    .favorite {
-      position:absolute;
-      top:10px;
-      left:10px;
-      width:38px;
-      height:38px;
-      border:none;
-      border-radius:50%;
-      background:rgba(0,0,0,.65);
-      color:white;
-      font-size:19px;
-      display:grid;
-      place-items:center;
-    }
-
-    .favorite.active {
-      color:var(--red);
-    }
-
-    .product-body {
-      padding:15px;
-    }
-
-    .product-title {
-      font-size:16px;
-      font-weight:bold;
-      margin-bottom:9px;
-    }
-
-    .product-desc {
-      color:var(--muted);
-      font-size:12px;
-      height:36px;
-      line-height:1.5;
-      overflow:hidden;
-    }
-
-    .product-bottom {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-top:15px;
-    }
-
-    .price {
-      color:var(--red);
-      font-size:17px;
-      font-weight:900;
-    }
-
-    .location {
-      color:var(--muted);
-      font-size:11px;
-    }
-
-    .ai-section {
-      background:linear-gradient(145deg,#111,#0a0a0a);
-      border:1px solid #292929;
-      border-radius:25px;
-      overflow:hidden;
-    }
-
-    .ai-header {
-      padding:20px;
-      border-bottom:1px solid #292929;
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-
-    .ai-logo {
-      width:45px;
-      height:45px;
-      border-radius:14px;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(135deg,var(--red),#69001a);
-      font-weight:900;
-      color:#fff;
-    }
-
-    .ai-layout {
-      display:grid;
-      grid-template-columns:270px 1fr;
-      min-height:400px;
-    }
-
-    .chat-sidebar {
-      border-left:1px solid #292929;
-      padding:15px;
-    }
-
-    .new-chat {
-      width:100%;
-      padding:12px;
-      border:1px solid var(--red);
-      background:rgba(255,23,68,.08);
-      color:#ff5475;
-      border-radius:12px;
-      margin-bottom:14px;
-    }
-
-    .chat-main {
-      display:flex;
-      flex-direction:column;
-    }
-
-    .messages {
-      flex:1;
-      padding:20px;
-      overflow-y:auto;
-      max-height:350px;
-    }
-
-    .message {
-      max-width:78%;
-      margin-bottom:12px;
-      padding:12px 15px;
-      border-radius:15px;
-      line-height:1.8;
-      white-space:pre-wrap;
-    }
-
-    .message.user {
-      margin-right:auto;
-      background:var(--red);
-      color:white;
-      border-bottom-right-radius:4px;
-    }
-
-    .message.ai {
-      margin-left:auto;
-      background:#1b1b1b;
-      border:1px solid #292929;
-      border-bottom-left-radius:4px;
-      color:#fff;
-    }
-
-    .chat-input {
-      padding:15px;
-      border-top:1px solid #292929;
-      display:flex;
-      gap:8px;
-    }
-
-    .chat-input input {
-      flex:1;
-      background:#171717;
-      color:white;
-      border:1px solid #303030;
-      border-radius:13px;
-      padding:13px;
-      outline:none;
-    }
-
-    .send-btn {
-      width:48px;
-      border:none;
-      background:var(--red);
-      color:white;
-      border-radius:13px;
-    }
-
-    .features {
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:15px;
-    }
-
-    .feature {
-      padding:22px;
-      border:1px solid var(--border);
-      background:var(--card);
-      border-radius:var(--radius);
-    }
-
-    .feature-icon {
-      font-size:28px;
-      margin-bottom:12px;
-    }
-
-    .feature h3 {
-      margin-bottom:7px;
-    }
-
-    .feature p {
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.8;
-    }
-
-    footer {
-      border-top:1px solid var(--border);
-      margin-top:60px;
-      padding:35px 0;
-      color:var(--muted);
-    }
-
-    .footer-grid {
-      display:grid;
-      grid-template-columns:2fr 1fr 1fr 1fr;
-      gap:30px;
-    }
-
-    footer h3 {
-      color:var(--text);
-      margin-bottom:12px;
-    }
-
-    footer p,
-    footer a {
-      font-size:13px;
-      line-height:2.1;
-      display:block;
-    }
-
-    .modal {
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.75);
-      backdrop-filter:blur(8px);
-      z-index:2000;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:15px;
-    }
-
-    .modal.show {
-      display:flex;
-    }
-
-    .modal-box {
-      width:min(500px,100%);
-      max-height:90vh;
-      overflow-y:auto;
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:24px;
-      padding:25px;
-      box-shadow:0 25px 70px rgba(0,0,0,.5);
-    }
-
-    .modal-head {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:20px;
-    }
-
-    .close {
-      border:none;
-      background:var(--card2);
-      color:var(--text);
-      width:36px;
-      height:36px;
-      border-radius:10px;
-    }
-
-    .form-group {
-      margin-bottom:14px;
-    }
-
-    .form-group label {
-      display:block;
-      margin-bottom:7px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width:100%;
-      background:var(--bg2);
-      color:var(--text);
-      border:1px solid var(--border);
-      padding:12px;
-      border-radius:12px;
-      outline:none;
-    }
-
-    .form-group textarea {
-      min-height:100px;
-      resize:vertical;
-    }
-
-    .google-btn {
-      width:100%;
-      padding:14px;
-      border-radius:13px;
-      background:white;
-      color:#111;
-      border:1px solid #ddd;
-      font-weight:bold;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      margin-top:12px;
-    }
-
-    .google-icon {
-      font-weight:900;
-      color:#4285f4;
-    }
-
-    .user-card {
-      text-align:center;
-      padding:10px;
-    }
-
-    .avatar {
-      width:80px;
-      height:80px;
-      border-radius:50%;
-      object-fit:cover;
-      border:3px solid var(--red);
-      margin-bottom:12px;
-    }
-
-    .loading {
-      text-align:center;
-      padding:30px;
-      color:var(--muted);
-      grid-column: 1 / -1;
-    }
-
-    @media(max-width:900px) {
-      .products { grid-template-columns:repeat(2,1fr); }
-      .categories { grid-template-columns:repeat(3,1fr); }
-      .features { grid-template-columns:repeat(2,1fr); }
-      .footer-grid { grid-template-columns:1fr 1fr; }
-    }
-
-    @media(max-width:650px) {
-      .header-inner { min-height:65px; flex-wrap:wrap; padding:10px 0; }
-      .logo { min-width:auto; }
-      .search-box { order:5; flex-basis:100%; }
-      .header-actions { margin-right:auto; }
-      .sell-btn { display:none; }
-      .hero { min-height:380px; }
-      .hero-content { padding:25px; }
-      .products { grid-template-columns:repeat(2,1fr); gap:9px; }
-      .product-image { height:160px; }
-      .product-body { padding:11px; }
-      .categories { grid-template-columns:repeat(3,1fr); gap:7px; }
-      .category { padding:14px 5px; }
-      .category-icon { font-size:23px; }
-      .ai-layout { grid-template-columns:1fr; }
-      .chat-sidebar { border-left:0; border-bottom:1px solid #292929; }
-      .features { grid-template-columns:1fr; }
-      .footer-grid { grid-template-columns:1fr; }
-      .message { max-width:90%; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فروشگاه آنلاین زیوو | Zivo</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            700: '#0e7490',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://v1.fontapi.ir/css/Vazir');
+        body { 
+            font-family: 'Vazir', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #fef3c7 50%, #f3e8ff 100%);
+            min-height: 100vh;
+        }
+        /* Glassmorphism Styles */
+        .glass {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
 </head>
+<body class="text-gray-800 antialiased">
 
-<body>
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 glass shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <span class="text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">ZIVO</span>
+            </div>
 
-<header>
-  <div class="container header-inner">
-    <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-      <div class="logo-mark">Z</div>
-      Zivo
-    </a>
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-md hidden md:block">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="جستجو در زیوو..." 
+                        class="w-full pl-4 pr-10 py-2 rounded-full glass text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-gray-500">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-500"></i>
+                </div>
+            </div>
 
-    <div class="search-box">
-      <span class="search-icon">🔎</span>
-      <input id="searchInput" type="search" placeholder="جستجوی محصول، موبایل، لپ‌تاپ و..." />
-    </div>
+            <!-- Actions -->
+            <div class="flex items-center gap-3">
+                <!-- Favorite Counter Button -->
+                <button id="favoriteMenuBtn" class="relative p-2.5 rounded-full glass hover:bg-white/60 text-rose-500 transition">
+                    <i class="fa-solid fa-heart text-lg"></i>
+                    <span id="favCount" class="absolute -top-1 -right-1 bg-rose-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                </button>
 
-    <div class="header-actions">
-      <button class="icon-btn" id="themeBtn">🌙</button>
-      <button class="icon-btn" id="favBtn">♡</button>
-      <button class="icon-btn" id="accountBtn">👤</button>
-      <button class="sell-btn" id="openSellModalBtn">+ ثبت آگهی</button>
-    </div>
-  </div>
-</header>
-
-<main class="container">
-
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">بازار آنلاین Zivo</div>
-      <h1>خرید و فروش، <span>ساده‌تر.</span></h1>
-      <p>کالاهای موردنظرت را پیدا کن، آگهی خودت را ثبت کن و با فروشنده‌ها مستقیماً گفتگو کن.</p>
-      <div class="hero-buttons">
-        <button class="primary-btn" onclick="document.getElementById('productsSection').scrollIntoView({behavior:'smooth'})">مشاهده محصولات</button>
-        <button class="secondary-btn" id="heroSellBtn">ثبت آگهی جدید</button>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="section-head">
-      <div>
-        <h2>دسته‌بندی‌ها</h2>
-        <small>دسته موردنظر خود را انتخاب کن</small>
-      </div>
-    </div>
-    <div class="categories" id="categories">
-      <div class="category active" data-cat="all"><div class="category-icon">🛍️</div><div class="category-name">همه</div></div>
-      <div class="category" data-cat="digital"><div class="category-icon">📱</div><div class="category-name">کالای دیجیتال</div></div>
-      <div class="category" data-cat="home"><div class="category-icon">🏠</div><div class="category-name">خانه و آشپزخانه</div></div>
-      <div class="category" data-cat="fashion"><div class="category-icon">👕</div><div class="category-name">مد و پوشاک</div></div>
-      <div class="category" data-cat="vehicles"><div class="category-icon">🚗</div><div class="category-name">وسایل نقلیه</div></div>
-      <div class="category" data-cat="services"><div class="category-icon">🛠️</div><div class="category-name">خدمات</div></div>
-    </div>
-  </section>
-
-  <section id="productsSection">
-    <div class="section-head">
-      <div>
-        <h2>آگهی‌های جدید</h2>
-        <small id="productCount">در حال بارگذاری...</small>
-      </div>
-      <button class="secondary-btn" id="resetProductsBtn">همه محصولات</button>
-    </div>
-    <div class="products" id="products">
-      <div class="loading">در حال دریافت آگهی‌ها...</div>
-    </div>
-  </section>
-
-  <section id="zivoAI">
-    <div class="section-head">
-      <div>
-        <h2>🤖 Zivo AI</h2>
-        <small>دستیار هوشمند داخل Zivo</small>
-      </div>
-    </div>
-
-    <div class="ai-section">
-      <div class="ai-header">
-        <div class="ai-logo">Z</div>
-        <div>
-          <strong>Zivo AI</strong>
-          <div style="color:#888;font-size:12px;margin-top:4px">آماده کمک به شما</div>
+                <!-- Auth Button -->
+                <button id="authBtn" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-md">
+                    <i class="fa-solid fa-user"></i>
+                    <span id="authBtnText">ورود / ثبت‌نام</span>
+                </button>
+            </div>
         </div>
-      </div>
+    </header>
 
-      <div class="ai-layout">
-        <aside class="chat-sidebar">
-          <button class="new-chat" id="clearChatBtn">＋ گفت‌وگوی جدید</button>
-        </aside>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Banner -->
+        <section class="mb-10 rounded-3xl glass p-8 shadow-xl relative overflow-hidden border border-white/60">
+            <div class="relative z-10 max-w-lg">
+                <h1 class="text-3xl sm:text-4xl font-extrabold mb-4 text-gray-900">پلتفرم فروشگاهی زیوو</h1>
+                <p class="text-gray-700 mb-6 text-sm sm:text-base">محصولات خود را مشاهده و آگهی‌های مورد علاقه خود را نشان‌گذاری کنید.</p>
+            </div>
+        </section>
 
-        <div class="chat-main">
-          <div class="messages" id="messages">
-            <div class="message ai">سلام! من دستیار هوشمند Zivo هستم. چطور می‌تونم کمکتون کنم؟</div>
-          </div>
-          <div class="chat-input">
-            <input id="chatInput" placeholder="از Zivo AI بپرس..." />
-            <button class="send-btn" id="sendChatBtn">➤</button>
-          </div>
+        <!-- Product Grid Header -->
+        <section id="products" class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold flex items-center gap-2 text-gray-800">
+                    <i class="fa-solid fa-border-all text-cyan-600"></i> لیست آگهی‌ها
+                </h2>
+            </div>
+            
+            <!-- Dynamic Products Container (No static ads included) -->
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="col-span-full text-center py-16 glass-card rounded-3xl text-gray-600">
+                    <i class="fa-solid fa-box-open text-4xl mb-3 text-cyan-600 block"></i>
+                    هیچ آگهی یافت نشد یا در حال دریافت اطلاعات از فایربیس...
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- AI Floating Chat Widget -->
+    <div id="aiChat" class="fixed bottom-6 right-6 z-50">
+        <button id="toggleChatBtn" class="bg-cyan-600 hover:bg-cyan-700 text-white p-4 rounded-full shadow-2xl flex items-center justify-center text-xl transition transform hover:scale-110">
+            <i class="fa-solid fa-robot"></i>
+        </button>
+
+        <div id="chatBox" class="hidden absolute bottom-16 right-0 w-80 sm:w-96 glass rounded-2xl shadow-2xl overflow-hidden flex flex-col h-96 border border-white/80">
+            <div class="bg-brand-600 text-white p-4 font-bold flex justify-between items-center text-sm">
+                <span><i class="fa-solid fa-sparkles ml-1"></i> دستیار زیوو</span>
+                <button id="closeChatBtn" class="text-white hover:text-gray-200"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm">
+                <div class="glass-card p-3 rounded-2xl max-w-[80%] text-gray-800">سلام! چطور می‌تونم کمکتون کنم؟</div>
+            </div>
+            <div class="p-3 border-t border-white/50 flex gap-2">
+                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." class="flex-1 px-3 py-2 glass text-sm rounded-xl focus:outline-none placeholder-gray-500">
+                <button id="sendChatBtn" class="bg-brand-600 text-white px-3 py-2 rounded-xl text-sm"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="section-head"><h2>چرا Zivo؟</h2></div>
-    <div class="features">
-      <div class="feature"><div class="feature-icon">🔐</div><h3>ورود امن</h3><p>ورود با حساب Google از طریق Firebase Authentication.</p></div>
-      <div class="feature"><div class="feature-icon">💬</div><h3>گفت‌وگو</h3><p>با فروشنده‌ها و همچنین Zivo AI در گفت‌وگوهای جداگانه صحبت کن.</p></div>
-      <div class="feature"><div class="feature-icon">❤️</div><h3>علاقه‌مندی</h3><p>محصولات موردعلاقه خودت را ذخیره کن.</p></div>
-      <div class="feature"><div class="feature-icon">⚡</div><h3>سریع و ساده</h3><p>طراحی شده برای موبایل، تبلت و کامپیوتر.</p></div>
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  <div class="container footer-grid">
-    <div><h3>Zivo</h3><p>پلتفرم خرید و فروش آنلاین.</p><p>© 2026 Zivo</p></div>
-    <div>
-      <h3>دسترسی</h3>
-      <a href="#productsSection">محصولات</a>
-      <a href="#" id="footFavBtn">علاقه‌مندی‌ها</a>
-      <a href="#" id="footAccBtn">حساب کاربری</a>
-    </div>
-    <div>
-      <h3>Zivo AI</h3>
-      <a href="#zivoAI">دستیار هوشمند</a>
-    </div>
-    <div>
-      <h3>اطلاعات</h3>
-      <a href="#">درباره Zivo</a>
-      <a href="#">حریم خصوصی</a>
-      <a href="#">قوانین</a>
-    </div>
-  </div>
-</footer>
-
-<!-- ACCOUNT MODAL -->
-<div class="modal" id="accountModal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h2>حساب کاربری</h2>
-      <button class="close" onclick="closeModal('accountModal')">✕</button>
     </div>
 
-    <div id="userLoggedOut">
-      <p style="margin-bottom: 15px; color: var(--muted); text-align: center;">برای ثبت آگهی و دسترسی کامل، وارد حساب گوگل خود شوید.</p>
-      <button class="google-btn" id="googleLoginBtn">
-        <span class="google-icon">G</span>
-        ورود / ثبت‌نام با گوگل
-      </button>
-    </div>
+    <!-- Firebase SDK & Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    <div id="userLoggedIn" style="display: none;">
-      <div class="user-card">
-        <img id="userAvatar" class="avatar" src="" alt="User Avatar" />
-        <h3 id="userName"></h3>
-        <p id="userEmail" style="color:var(--muted); font-size: 13px; margin-top:4px;"></p>
-        <button class="secondary-btn" id="logoutBtn" style="margin-top: 20px; width: 100%; border-color: var(--red); color: var(--red);">خروج از حساب</button>
-      </div>
-    </div>
-  </div>
-</div>
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "myai-bd693.firebaseapp.com",
+            projectId: "myai-bd693",
+            storageBucket: "myai-bd693.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-<!-- SELL MODAL -->
-<div class="modal" id="sellModal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h2>ثبت آگهی جدید</h2>
-      <button class="close" onclick="closeModal('sellModal')">✕</button>
-    </div>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
 
-    <form id="sellForm">
-      <div class="form-group">
-        <label>عنوان آگهی</label>
-        <input type="text" id="postTitle" placeholder="مثال: گوشی شیائومی 13T در حد نو" required />
-      </div>
+        // Auth handling
+        const authBtn = document.getElementById('authBtn');
+        const authBtnText = document.getElementById('authBtnText');
+        let currentUser = null;
 
-      <div class="form-group">
-        <label>دسته‌بندی</label>
-        <select id="postCat" required>
-          <option value="digital">کالای دیجیتال</option>
-          <option value="home">خانه و آشپزخانه</option>
-          <option value="fashion">مد و پوشاک</optio
+        authBtn.addEventListener('click', async () => {
+            if (currentUser) {
+                await signOut(auth);
+                alert("از حساب کاربری خارج شدید.");
+            } else {
+                try {
+                    await signInWithPopup(auth, googleProvider);
+                } catch (error) {
+                    console.error("خطا در ورود:", error);
+                    alert("خطا در ورود به حساب کاربری");
+                }
+            }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                authBtnText.innerText = user.displayName || "حساب کاربری";
+            } else {
+                authBtnText.innerText = "ورود / ثبت‌نام";
+            }
+        });
+
+        // Favorites functionality
+        let favorites = JSON.parse(localStorage.getItem('zivo_favorites')) || [];
+        
+        function updateFavBadge() {
+            const badge = document.getElementById('favCount');
+            if (favorites.length > 0) {
+                badge.innerText = favorites.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+        updateFavBadge();
+
+        // UI Chat Toggles
+        const toggleChatBtn = document.getElementById('toggleChatBtn');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+        const chatBox = document.getElementById('chatBox');
+
+        toggleChatBtn.addEventListener('click', () => chatBox.classList.toggle('hidden'));
+        closeChatBtn.addEventListener('click', () => chatBox.classList.add('hidden'));
+    </script>
+</body>
+</html>
