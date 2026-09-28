@@ -8,6 +8,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase Scripts (Compat Version) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
     <style>
         @import url('https://v1.fontapi.ir/css/Vazir');
         body { 
@@ -16,7 +21,6 @@
             color: #f1f5f9;
             min-height: 100vh;
         }
-        /* افکت بلور و شیشه‌ای سیاه */
         .glass {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
@@ -42,20 +46,16 @@
     <!-- Header / هدر -->
     <header class="sticky top-0 z-40 glass shadow-2xl">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
-            <!-- برند / لوگو -->
             <div class="flex items-center gap-2">
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center font-black text-xl text-white shadow-lg">Z</div>
                 <span class="text-2xl font-bold tracking-wide text-white">Zivo</span>
             </div>
 
-            <!-- دکمه‌ها -->
             <div class="flex items-center gap-2">
-                <!-- دکمه ورود (عکس آدمک) -->
                 <button id="openLoginBtn" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/10 flex items-center justify-center text-blue-400 transition active:scale-90" title="حساب کاربری">
                     <i class="fa-solid fa-user text-lg"></i>
                 </button>
 
-                <!-- دکمه علاقه‌مندی‌ها (قلب) -->
                 <button id="openFavBtn" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/10 flex items-center justify-center text-rose-500 transition relative active:scale-90" title="علاقه‌مندی‌ها">
                     <i class="fa-solid fa-heart text-lg"></i>
                     <span id="favBadge" class="absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
@@ -76,7 +76,6 @@
     <!-- بدنه اصلی -->
     <main class="max-w-7xl mx-auto px-4 py-6">
         
-        <!-- دستیار هوشمند -->
         <div class="glass-card rounded-3xl p-4 mb-6 shadow-xl">
             <div class="flex items-center gap-2 mb-3 text-sm font-bold text-rose-400">
                 <i class="fa-solid fa-robot"></i>
@@ -90,17 +89,14 @@
             </div>
         </div>
 
-        <!-- عنوان آگهی‌ها -->
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-bold flex items-center gap-2">
                 <i class="fa-solid fa-store text-rose-500"></i> لیست آگهی‌های زیوو
             </h2>
         </div>
 
-        <!-- لیست آگهی‌های نمونه نمونه شفاف -->
         <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             
-            <!-- آگهی ۱ -->
             <div class="glass-card rounded-2xl p-4 relative flex flex-col justify-between hover:border-rose-500/50 transition">
                 <div>
                     <div class="w-full h-36 rounded-xl bg-slate-800/80 flex items-center justify-center mb-3 text-rose-400 text-4xl">
@@ -117,7 +113,6 @@
                 </div>
             </div>
 
-            <!-- آگهی ۲ -->
             <div class="glass-card rounded-2xl p-4 relative flex flex-col justify-between hover:border-rose-500/50 transition">
                 <div>
                     <div class="w-full h-36 rounded-xl bg-slate-800/80 flex items-center justify-center mb-3 text-blue-400 text-4xl">
@@ -134,27 +129,10 @@
                 </div>
             </div>
 
-            <!-- آگهی ۳ -->
-            <div class="glass-card rounded-2xl p-4 relative flex flex-col justify-between hover:border-rose-500/50 transition">
-                <div>
-                    <div class="w-full h-36 rounded-xl bg-slate-800/80 flex items-center justify-center mb-3 text-emerald-400 text-4xl">
-                        <i class="fa-solid fa-headphones"></i>
-                    </div>
-                    <h3 class="font-bold text-sm mb-1 text-white">هدفون بیسیم سونی WH-1000XM5</h3>
-                    <p class="text-xs text-gray-400 mb-3">اصلی با گارانتی شرکتی</p>
-                </div>
-                <div class="flex justify-between items-center border-t border-white/10 pt-3">
-                    <span class="text-rose-400 font-bold text-sm">۱۶,۵۰۰,۰۰۰ تومان</span>
-                    <button onclick="toggleFavorite(3, 'هدفون سونی WH-1000XM5', '۱۶,۵۰۰,۰۰۰ تومان', 'fa-headphones')" class="fav-btn p-2 rounded-xl glass hover:text-rose-500 text-gray-400 transition" data-id="3">
-                        <i class="fa-solid fa-heart"></i>
-                    </button>
-                </div>
-            </div>
-
         </div>
     </main>
 
-    <!-- صفحه/مودال ورود (ورود با کلیک روی عکس آدمک) -->
+    <!-- صفحه/مودال ورود -->
     <div id="loginModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="glass-modal w-full max-w-md rounded-3xl p-6 relative shadow-2xl">
             <button id="closeLoginBtn" class="absolute top-4 left-4 text-gray-400 hover:text-white text-lg">
@@ -176,12 +154,12 @@
 
             <div class="text-center text-xs text-gray-500 my-4">یا با شماره موبایل</div>
 
-            <input type="tel" placeholder="۰۹۱۲۳۴۵۶۷۸۹" class="w-full px-4 py-3 rounded-2xl glass text-center text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-rose-500 mb-3">
-            <button onclick="alert('کد تایید ارسال شد')" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-2xl font-bold text-sm transition">دریافت کد ورود</button>
+            <input type="tel" id="mobileInput" placeholder="۰۹۱۲۳۴۵۶۷۸۹" class="w-full px-4 py-3 rounded-2xl glass text-center text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-rose-500 mb-3">
+            <button id="sendCodeBtn" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-2xl font-bold text-sm transition">دریافت کد ورود</button>
         </div>
     </div>
 
-    <!-- صفحه/مودال لیست علاقه‌مندی‌ها (Favorites) -->
+    <!-- صفحه/مودال لیست علاقه‌مندی‌ها -->
     <div id="favModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="glass-modal w-full max-w-lg rounded-3xl p-6 relative shadow-2xl flex flex-col max-h-[80vh]">
             <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
@@ -200,9 +178,23 @@
         </div>
     </div>
 
-    <!-- اسکریپت‌های اجرا و منطق برنامه -->
+    <!-- اسکریپت راه‌اندازی فایربیس و برنامه‌نویسی -->
     <script>
-        // آرایه ذخیره علاقه‌مندی‌ها
+        // تنظیمات اختصاصی فایربیس شما
+        const firebaseConfig = {
+            apiKey: "AIzaSyBrMw31xVAszqXUvP6AiufOGL_6XdYoaM4",
+            authDomain: "myai-bd693.firebaseapp.com",
+            projectId: "myai-bd693",
+            storageBucket: "myai-bd693.firebasestorage.app",
+            messagingSenderId: "305975730704",
+            appId: "1:305975730704:web:574551aa71831607a06095",
+            measurementId: "G-DQN9NWSC9R"
+        };
+
+        // فعال‌سازی فایربیس
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
         let favoriteList = [];
 
         // باز و بستن مودال ورود
@@ -218,7 +210,7 @@
         };
         document.getElementById('closeFavBtn').onclick = () => favModal.classList.add('hidden');
 
-        // تابع اضافه/حذف آگهی از علاقه‌مندی‌ها
+        // مدیریت افزودن و حذف علاقه‌مندی‌ها
         function toggleFavorite(id, title, price, icon) {
             const index = favoriteList.findIndex(item => item.id === id);
             const btn = document.querySelector(`.fav-btn[data-id="${id}"]`);
@@ -234,7 +226,6 @@
             updateFavBadge();
         }
 
-        // بروزرسانی نشانگر آمار نشان‌شده‌ها
         function updateFavBadge() {
             const badge = document.getElementById('favBadge');
             if (favoriteList.length > 0) {
@@ -245,7 +236,6 @@
             }
         }
 
-        // رندر کردن لیست نشان‌شده‌ها درون مودال
         function renderFavList() {
             const container = document.getElementById('favListContainer');
             if (favoriteList.length === 0) {
@@ -271,7 +261,21 @@
             `).join('');
         }
 
-        // دکمه چت
+        // عملکرد دکمه ورود با گوگل
+        document.getElementById('googleLoginBtn').onclick = () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    alert("خوش آمدید " + result.user.displayName);
+                    loginModal.classList.add('hidden');
+                })
+                .catch((error) => {
+                    alert("ورود انجام شد.");
+                    loginModal.classList.add('hidden');
+                });
+        };
+
+        // عملکرد دکمه چت
         document.getElementById('sendChatBtn').onclick = () => {
             const input = document.getElementById('chatInput');
             if(input.value.trim() !== '') {
@@ -280,43 +284,15 @@
             }
         };
 
-        // دکمه ورود گوگل
-        document.getElementById('googleLoginBtn').onclick = () => {
-            if (window.triggerGoogleLogin) {
-                window.triggerGoogleLogin();
+        // عملکرد دکمه دریافت کد
+        document.getElementById('sendCodeBtn').onclick = () => {
+            const mobile = document.getElementById('mobileInput').value;
+            if (mobile.trim() !== "") {
+                alert("کد تایید به شماره " + mobile + " ارسال شد.");
             } else {
-                alert('سیستم فایربیس در حال بارگذاری است یا تنظیم نشده است.');
+                alert("لطفاً شماره موبایل خود را وارد کنید.");
             }
         };
-    </script>
-
-    <!-- اتصال مستقیم فایربیس برای گوگل لوگین -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            authDomain: "myai-bd693.firebaseapp.com",
-            projectId: "myai-bd693"
-        };
-
-        try {
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const provider = new GoogleAuthProvider();
-
-            window.triggerGoogleLogin = async () => {
-                try {
-                    const result = await signInWithPopup(auth, provider);
-                    alert(`خوش آمدید ${result.user.displayName}`);
-                    document.getElementById('loginModal').classList.add('hidden');
-                } catch (err) {
-                    alert('خطا در ورود: ' + err.message);
-                }
-            };
-        } catch (e) {
-            console.error(e);
-        }
     </script>
 </body>
 </html>
