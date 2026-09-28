@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zivo | زیوو</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://v1.fontapi.ir/css/Vazir');
@@ -96,20 +98,20 @@
     <!-- Inline JavaScript Functions -->
     <script>
         function handleProfileClick() {
-            alert("دکمه پروفایل کلیک شد!");
+            alert("دکمه پروفایل کار می‌کند!");
         }
 
         function handleFavClick() {
-            alert("دکمه علاقه‌مندی‌ها کلیک شد!");
+            alert("دکمه علاقه‌مندی‌ها کار می‌کند!");
         }
 
         function handleSendMessage() {
             const input = document.getElementById('chatInput');
             if (input && input.value.trim() !== "") {
-                alert("پیام شما: " + input.value);
+                alert("پیام شما ارسال شد: " + input.value);
                 input.value = "";
             } else {
-                alert("لطفاً پیامی بنویسید.");
+                alert("لطفاً متنی بنویسید.");
             }
         }
     </script>
