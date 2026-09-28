@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zivo | زیوو</title>
+    <title>زیوو | Zivo</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -12,107 +12,310 @@
         @import url('https://v1.fontapi.ir/css/Vazir');
         body { 
             font-family: 'Vazir', sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
+            background: #090d16;
+            color: #f1f5f9;
             min-height: 100vh;
         }
+        /* افکت بلور و شیشه‌ای سیاه */
         .glass {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
     </style>
 </head>
-<body class="pb-20">
+<body class="pb-24">
 
-    <!-- Header -->
-    <header class="sticky top-0 z-40 glass shadow-lg">
+    <!-- Header / هدر -->
+    <header class="sticky top-0 z-40 glass shadow-2xl">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
-            <!-- Logo -->
+            <!-- برند / لوگو -->
             <div class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-2xl bg-rose-600 flex items-center justify-center font-black text-xl text-white shadow-lg">Z</div>
-                <span class="text-2xl font-bold tracking-wide">Zivo</span>
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center font-black text-xl text-white shadow-lg">Z</div>
+                <span class="text-2xl font-bold tracking-wide text-white">Zivo</span>
             </div>
 
-            <!-- Header Actions / Buttons -->
+            <!-- دکمه‌ها -->
             <div class="flex items-center gap-2">
-                <!-- Profile / Auth Button -->
-                <button onclick="handleProfileClick()" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center text-blue-400 transition active:scale-90 cursor-pointer" title="ورود / حساب کاربری">
+                <!-- دکمه ورود (عکس آدمک) -->
+                <button id="openLoginBtn" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/10 flex items-center justify-center text-blue-400 transition active:scale-90" title="حساب کاربری">
                     <i class="fa-solid fa-user text-lg"></i>
                 </button>
 
-                <!-- Favorites Button -->
-                <button onclick="handleFavClick()" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/20 flex items-center justify-center text-rose-500 transition active:scale-90 cursor-pointer" title="علاقه‌مندی‌ها">
+                <!-- دکمه علاقه‌مندی‌ها (قلب) -->
+                <button id="openFavBtn" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/10 flex items-center justify-center text-rose-500 transition relative active:scale-90" title="علاقه‌مندی‌ها">
                     <i class="fa-solid fa-heart text-lg"></i>
+                    <span id="favBadge" class="absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Search Section -->
+    <!-- بخش جستجو -->
     <div class="max-w-7xl mx-auto px-4 mt-4">
         <div class="relative">
-            <input type="text" id="searchInput" placeholder="جستجوی محصول، موبایل، لپ‌تاپ و..." 
-                class="w-full pr-10 pl-4 py-3 rounded-2xl glass text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 text-white placeholder-gray-400">
+            <input type="text" id="searchInput" placeholder="جستجوی آگهی، موبایل، لپ‌تاپ..." 
+                class="w-full pr-10 pl-4 py-3 rounded-2xl glass text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 text-white placeholder-gray-400 shadow-inner">
             <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3.5 text-gray-400"></i>
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- بدنه اصلی -->
     <main class="max-w-7xl mx-auto px-4 py-6">
-        <!-- AI Assistant Box -->
-        <div class="glass-card rounded-3xl p-4 mb-6">
+        
+        <!-- دستیار هوشمند -->
+        <div class="glass-card rounded-3xl p-4 mb-6 shadow-xl">
             <div class="flex items-center gap-2 mb-3 text-sm font-bold text-rose-400">
                 <i class="fa-solid fa-robot"></i>
-                <span>سلام! من دستیار هوشمند Zivo هستم. چطور می‌توانم کمکتان کنم؟</span>
+                <span>سلام! من دستیار زیوو هستم. چطور می‌توانم کمکتان کنم؟</span>
             </div>
             <div class="flex gap-2">
-                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." class="flex-1 px-4 py-2.5 rounded-xl glass text-sm focus:outline-none text-white">
-                <button onclick="handleSendMessage()" type="button" class="bg-rose-600 hover:bg-rose-700 text-white px-4 rounded-xl flex items-center justify-center transition active:scale-90 cursor-pointer">
+                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." class="flex-1 px-4 py-2.5 rounded-xl glass text-sm focus:outline-none text-white placeholder-gray-500">
+                <button id="sendChatBtn" type="button" class="bg-rose-600 hover:bg-rose-700 text-white px-4 rounded-xl flex items-center justify-center transition active:scale-95">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Section Header -->
+        <!-- عنوان آگهی‌ها -->
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-bold flex items-center gap-2">
-                <i class="fa-solid fa-store text-rose-500"></i> لیست آگهی‌ها
+                <i class="fa-solid fa-store text-rose-500"></i> لیست آگهی‌های زیوو
             </h2>
         </div>
 
+        <!-- لیست آگهی‌های نمونه نمونه شفاف -->
         <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div class="col-span-full text-center py-12 glass-card rounded-2xl text-gray-400 text-sm">
-                هیچ آگهی ثبت نشده است.
+            
+            <!-- آگهی ۱ -->
+            <div class="glass-card rounded-2xl p-4 relative flex flex-col justify-between hover:border-rose-500/50 transition">
+                <div>
+                    <div class="w-full h-36 rounded-xl bg-slate-800/80 flex items-center justify-center mb-3 text-rose-400 text-4xl">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </div>
+                    <h3 class="font-bold text-sm mb-1 text-white">آیفون ۱۵ پرو مکس</h3>
+                    <p class="text-xs text-gray-400 mb-3">سالم در حد نو - ۲۵۶ گیگ</p>
+                </div>
+                <div class="flex justify-between items-center border-t border-white/10 pt-3">
+                    <span class="text-rose-400 font-bold text-sm">۶۵,۰۰۰,۰۰۰ تومان</span>
+                    <button onclick="toggleFavorite(1, 'آیفون ۱۵ پرو مکس', '۶۵,۰۰۰,۰۰۰ تومان', 'fa-mobile-screen-button')" class="fav-btn p-2 rounded-xl glass hover:text-rose-500 text-gray-400 transition" data-id="1">
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+                </div>
             </div>
+
+            <!-- آگهی ۲ -->
+            <div class="glass-card rounded-2xl p-4 relative flex flex-col justify-between hover:border-rose-500/50 transition">
+                <div>
+                    <div class="w-full h-36 rounded-xl bg-slate-800/80 flex items-center justify-center mb-3 text-blue-400 text-4xl">
+                        <i class="fa-solid fa-laptop"></i>
+                    </div>
+                    <h3 class="font-bold text-sm mb-1 text-white">لپ‌تاپ مک‌بوک ایر M2</h3>
+                    <p class="text-xs text-gray-400 mb-3">رم ۱۶ گیگ - حافظه ۵۱۲ گیگ</p>
+                </div>
+                <div class="flex justify-between items-center border-t border-white/10 pt-3">
+                    <span class="text-rose-400 font-bold text-sm">۵۸,۰۰۰,۰۰۰ تومان</span>
+                    <button onclick="toggleFavorite(2, 'لپ‌تاپ مک‌بوک ایر M2', '۵۸,۰۰۰,۰۰۰ تومان', 'fa-laptop')" class="fav-btn p-2 rounded-xl glass hover:text-rose-500 text-gray-400 transition" data-id="2">
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- آگهی ۳ -->
+            <div class="glass-card rounded-2xl p-4 relative flex flex-col justify-between hover:border-rose-500/50 transition">
+                <div>
+                    <div class="w-full h-36 rounded-xl bg-slate-800/80 flex items-center justify-center mb-3 text-emerald-400 text-4xl">
+                        <i class="fa-solid fa-headphones"></i>
+                    </div>
+                    <h3 class="font-bold text-sm mb-1 text-white">هدفون بیسیم سونی WH-1000XM5</h3>
+                    <p class="text-xs text-gray-400 mb-3">اصلی با گارانتی شرکتی</p>
+                </div>
+                <div class="flex justify-between items-center border-t border-white/10 pt-3">
+                    <span class="text-rose-400 font-bold text-sm">۱۶,۵۰۰,۰۰۰ تومان</span>
+                    <button onclick="toggleFavorite(3, 'هدفون سونی WH-1000XM5', '۱۶,۵۰۰,۰۰۰ تومان', 'fa-headphones')" class="fav-btn p-2 rounded-xl glass hover:text-rose-500 text-gray-400 transition" data-id="3">
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+                </div>
+            </div>
+
         </div>
     </main>
 
-    <!-- Inline JavaScript Functions -->
+    <!-- صفحه/مودال ورود (ورود با کلیک روی عکس آدمک) -->
+    <div id="loginModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="glass-modal w-full max-w-md rounded-3xl p-6 relative shadow-2xl">
+            <button id="closeLoginBtn" class="absolute top-4 left-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-rose-600/20 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                    <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">ورود به Zivo</h3>
+                <p class="text-xs text-gray-400 mt-1">برای ثبت و مدیریت آگهی‌ها وارد حساب شوید</p>
+            </div>
+
+            <button id="googleLoginBtn" class="w-full py-3 px-4 rounded-2xl glass hover:bg-white/10 flex items-center justify-center gap-3 text-white font-medium border border-white/10 transition active:scale-95">
+                <i class="fa-brands fa-google text-rose-500 text-lg"></i>
+                <span>ورود مستقیم با حساب گوگل</span>
+            </button>
+
+            <div class="text-center text-xs text-gray-500 my-4">یا با شماره موبایل</div>
+
+            <input type="tel" placeholder="۰۹۱۲۳۴۵۶۷۸۹" class="w-full px-4 py-3 rounded-2xl glass text-center text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-rose-500 mb-3">
+            <button onclick="alert('کد تایید ارسال شد')" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-2xl font-bold text-sm transition">دریافت کد ورود</button>
+        </div>
+    </div>
+
+    <!-- صفحه/مودال لیست علاقه‌مندی‌ها (Favorites) -->
+    <div id="favModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="glass-modal w-full max-w-lg rounded-3xl p-6 relative shadow-2xl flex flex-col max-h-[80vh]">
+            <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
+                <h3 class="text-lg font-bold flex items-center gap-2 text-rose-500">
+                    <i class="fa-solid fa-heart"></i>
+                    <span>آگهی‌های نشان‌شده</span>
+                </h3>
+                <button id="closeFavBtn" class="text-gray-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="favListContainer" class="flex-1 overflow-y-auto space-y-3 pr-1">
+                <p id="emptyFavText" class="text-center text-gray-400 text-sm py-8">هیچ آگهی انتخاب نشده است.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- اسکریپت‌های اجرا و منطق برنامه -->
     <script>
-        function handleProfileClick() {
-            alert("دکمه پروفایل کار می‌کند!");
-        }
+        // آرایه ذخیره علاقه‌مندی‌ها
+        let favoriteList = [];
 
-        function handleFavClick() {
-            alert("دکمه علاقه‌مندی‌ها کار می‌کند!");
-        }
+        // باز و بستن مودال ورود
+        const loginModal = document.getElementById('loginModal');
+        document.getElementById('openLoginBtn').onclick = () => loginModal.classList.remove('hidden');
+        document.getElementById('closeLoginBtn').onclick = () => loginModal.classList.add('hidden');
 
-        function handleSendMessage() {
-            const input = document.getElementById('chatInput');
-            if (input && input.value.trim() !== "") {
-                alert("پیام شما ارسال شد: " + input.value);
-                input.value = "";
+        // باز و بستن مودال علاقه‌مندی‌ها
+        const favModal = document.getElementById('favModal');
+        document.getElementById('openFavBtn').onclick = () => {
+            renderFavList();
+            favModal.classList.remove('hidden');
+        };
+        document.getElementById('closeFavBtn').onclick = () => favModal.classList.add('hidden');
+
+        // تابع اضافه/حذف آگهی از علاقه‌مندی‌ها
+        function toggleFavorite(id, title, price, icon) {
+            const index = favoriteList.findIndex(item => item.id === id);
+            const btn = document.querySelector(`.fav-btn[data-id="${id}"]`);
+
+            if (index === -1) {
+                favoriteList.push({ id, title, price, icon });
+                if(btn) btn.classList.add('text-rose-500');
             } else {
-                alert("لطفاً متنی بنویسید.");
+                favoriteList.splice(index, 1);
+                if(btn) btn.classList.remove('text-rose-500');
             }
+
+            updateFavBadge();
+        }
+
+        // بروزرسانی نشانگر آمار نشان‌شده‌ها
+        function updateFavBadge() {
+            const badge = document.getElementById('favBadge');
+            if (favoriteList.length > 0) {
+                badge.innerText = favoriteList.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // رندر کردن لیست نشان‌شده‌ها درون مودال
+        function renderFavList() {
+            const container = document.getElementById('favListContainer');
+            if (favoriteList.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 text-sm py-8">هیچ آگهی انتخاب نشده است.</p>`;
+                return;
+            }
+
+            container.innerHTML = favoriteList.map(item => `
+                <div class="glass-card p-3 rounded-2xl flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-rose-400 text-xl">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white">${item.title}</h4>
+                            <span class="text-xs text-rose-400">${item.price}</span>
+                        </div>
+                    </div>
+                    <button onclick="toggleFavorite(${item.id}); renderFavList();" class="text-gray-400 hover:text-rose-500 p-2">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // دکمه چت
+        document.getElementById('sendChatBtn').onclick = () => {
+            const input = document.getElementById('chatInput');
+            if(input.value.trim() !== '') {
+                alert('پیام شما ارسال شد: ' + input.value);
+                input.value = '';
+            }
+        };
+
+        // دکمه ورود گوگل
+        document.getElementById('googleLoginBtn').onclick = () => {
+            if (window.triggerGoogleLogin) {
+                window.triggerGoogleLogin();
+            } else {
+                alert('سیستم فایربیس در حال بارگذاری است یا تنظیم نشده است.');
+            }
+        };
+    </script>
+
+    <!-- اتصال مستقیم فایربیس برای گوگل لوگین -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            authDomain: "myai-bd693.firebaseapp.com",
+            projectId: "myai-bd693"
+        };
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const provider = new GoogleAuthProvider();
+
+            window.triggerGoogleLogin = async () => {
+                try {
+                    const result = await signInWithPopup(auth, provider);
+                    alert(`خوش آمدید ${result.user.displayName}`);
+                    document.getElementById('loginModal').classList.add('hidden');
+                } catch (err) {
+                    alert('خطا در ورود: ' + err.message);
+                }
+            };
+        } catch (e) {
+            console.error(e);
         }
     </script>
 </body>
