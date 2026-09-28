@@ -3,352 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>زیوو | Zivo - پلتفرم لوکس خرید و فروش</title>
+    <title>زیوو | تعویض تصویر با کلیک دکمه</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
+        tailwind.config = { darkMode: 'class' }
     </script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
     <style>
         @import url('https://v1.fontapi.ir/css/Vazir');
-        
-        * {
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-        }
-
-        body { 
+        body {
             font-family: 'Vazir', sans-serif;
-            min-height: 100vh;
-        }
-
-        /* تم تاریک */
-        .dark body {
-            background: #080c14;
+            background-color: #080c14;
             color: #f1f5f9;
         }
-
-        /* تم روشن */
-        body {
-            background: #f1f5f9;
-            color: #0f172a;
-        }
-
-        /* افکت‌های شیشه‌ای */
-        .glass-nav {
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .dark .glass-nav {
-            background: rgba(15, 23, 42, 0.8);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.85);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        }
-
         .glass-card {
+            background: rgba(30, 41, 59, 0.5);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .dark .glass-card {
-            background: rgba(30, 41, 59, 0.45);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-        }
-
-        .glass-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .page-view {
-            display: none;
-        }
-        .page-view.active {
-            display: block;
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+        .active-thumb {
+            border-color: #f43f5e !important;
+            transform: scale(1.05);
         }
     </style>
 </head>
-<body class="pb-28">
+<body class="p-4 sm:p-8 min-h-screen flex items-center justify-center">
 
-    <!-- Header / هدر لوکس -->
-    <header class="sticky top-0 z-40 glass-nav shadow-xl">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
-            
-            <div onclick="navigateTo('homePage')" class="flex items-center gap-3 cursor-pointer">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-rose-500/30">Z</div>
-                <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 bg-clip-text text-transparent">Zivo</span>
-            </div>
-
-            <!-- منوی ناوبری دکمه‌ها -->
-            <div class="flex items-center gap-2">
-                <!-- تغییر تم شب / روز -->
-                <button id="themeToggleBtn" type="button" class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-amber-400 hover:scale-105 active:scale-95 transition" title="تغییر تم">
-                    <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
-                </button>
-
-                <!-- ثبت آگهی -->
-                <button onclick="navigateTo('addAdPage')" class="px-3.5 py-2 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-rose-500/25 transition active:scale-95">
-                    <i class="fa-solid fa-plus text-sm"></i>
-                    <span class="hidden sm:inline">ثبت آگهی</span>
-                </button>
-
-                <!-- علاقه‌مندی‌ها -->
-                <button onclick="navigateTo('favPage')" class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-rose-500 relative hover:scale-105 active:scale-95 transition" title="علاقه‌مندی‌ها">
-                    <i class="fa-solid fa-heart text-lg"></i>
-                    <span id="favBadge" class="absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center hidden shadow-md">0</span>
-                </button>
-
-                <!-- پروفایل کاربر -->
-                <div id="userProfileArea">
-                    <button id="openLoginBtn" type="button" class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-rose-500 hover:scale-105 active:scale-95 transition" title="ورود به حساب">
-                        <i class="fa-solid fa-user text-lg"></i>
-                    </button>
-
-                    <button id="userInfoBtn" onclick="navigateTo('profilePage')" class="hidden flex items-center gap-2 glass-card p-1 pr-3 rounded-2xl hover:scale-105 transition">
-                        <img id="userAvatar" src="https://via.placeholder.com/40" alt="Avatar" class="w-8 h-8 rounded-xl object-cover border-2 border-rose-500">
-                        <span id="userName" class="text-xs font-bold max-w-[80px] truncate">کاربر</span>
-                    </button>
-                </div>
-            </div>
-
-        </div>
-    </header>
-
-    <!-- ================= 1. صفحه اصلی / فروشگاه ================= -->
-    <div id="homePage" class="page-view active max-w-7xl mx-auto px-4 pt-6">
+    <div class="max-w-4xl w-full space-y-8">
         
-        <!-- جستجو -->
-        <div class="relative mb-6">
-            <input type="text" id="searchInput" placeholder="جستجوی آیفون، مک‌بوک، خودرو، ساعت لوکس..." 
-                class="w-full pr-12 pl-4 py-4 rounded-3xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-inner">
-            <i class="fa-solid fa-magnifying-glass absolute right-4 top-4 text-gray-400 text-xl"></i>
+        <!-- هدر -->
+        <div class="text-center space-y-2">
+            <h1 class="text-2xl sm:text-3xl font-black bg-gradient-to-r from-rose-500 to-amber-500 bg-clip-text text-transparent">
+                نمایش تغییر تصویر با کلیک دکمه‌ها
+            </h1>
+            <p class="text-xs text-gray-400">روی دکمه‌ها یا تصاویر کوچک کلیک کنید تا تصویر اصلی تغییر کند.</p>
         </div>
 
-        <!-- دستیار هوشمند AI زیوو -->
-        <div class="glass-card rounded-3xl p-5 mb-8 border-r-4 border-r-rose-500 shadow-2xl">
-            <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-2 text-sm font-black text-rose-500">
-                    <i class="fa-solid fa-brain text-lg"></i>
-                    <span>دستیار هوشمند زیوو (حافظه ۵۰۰ کلمه‌ای)</span>
-                </div>
-                <span class="text-[10px] bg-rose-500/10 text-rose-500 px-2 py-0.5 rounded-full font-bold">Online AI</span>
-            </div>
+        <!-- ================= بخش ۱: گالری محصول (تغییر عکس اصلی با کلیک روی دکمه/عکس کوچک) ================= -->
+        <div class="glass-card p-6 rounded-3xl shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             
-            <div id="chatHistory" class="max-h-48 overflow-y-auto space-y-2 mb-3 pr-1 text-xs">
-                <div class="bg-rose-500/10 p-2.5 rounded-2xl border border-rose-500/20 text-rose-400">
-                    سلام! من دستیار هوشمند زیوو هستم. چطور می‌توانم در خرید یا فروش کالا کمکتان کنم؟
-                </div>
+            <!-- تصویر اصلی (که با دکمه تغییر می‌کند) -->
+            <div class="relative w-full h-72 rounded-2xl overflow-hidden bg-slate-800 border border-white/10 shadow-lg">
+                <img id="mainProductImage" 
+                     src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80" 
+                     alt="تصویر اصلی" 
+                     class="w-full h-full object-cover transition-all duration-500">
+                <span id="imageTag" class="absolute top-3 right-3 bg-rose-600 text-white text-[10px] font-bold px-3 py-1 rounded-xl shadow-md">
+                    نمای روبرو
+                </span>
             </div>
 
-            <div class="flex gap-2">
-                <input type="text" id="chatInput" placeholder="سوال خود را بپرسید..." class="flex-1 px-4 py-3 rounded-2xl glass-card text-sm focus:outline-none placeholder-gray-400">
-                <button id="sendChatBtn" type="button" class="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white px-5 rounded-2xl flex items-center justify-center transition active:scale-95 shadow-lg shadow-rose-500/30">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
+            <!-- دکمه‌ها و گزینه‌های تغییر عکس -->
+            <div class="space-y-4">
+                <h2 class="text-lg font-bold text-rose-400">انتخاب زوایای محصول:</h2>
+                
+                <!-- روش اول: دکمه‌های متنی/آیکون دار -->
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="changeImage('https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80', 'نمای روبرو', this)" 
+                            class="thumb-btn active-thumb p-3 rounded-2xl glass-card text-xs font-bold hover:bg-rose-500/20 border-2 border-transparent transition text-center">
+                        <i class="fa-solid fa-mobile-screen block text-base mb-1 text-rose-500"></i>
+                        نمای روبرو
+                    </button>
+
+                    <button onclick="changeImage('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80', 'نمای پشت', this)" 
+                            class="thumb-btn p-3 rounded-2xl glass-card text-xs font-bold hover:bg-rose-500/20 border-2 border-transparent transition text-center">
+                        <i class="fa-solid fa-camera block text-base mb-1 text-rose-500"></i>
+                        نمای پشت
+                    </button>
+
+                    <button onclick="changeImage('https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=800&q=80', 'نمای جانبی', this)" 
+                            class="thumb-btn p-3 rounded-2xl glass-card text-xs font-bold hover:bg-rose-500/20 border-2 border-transparent transition text-center">
+                        <i class="fa-solid fa-layer-group block text-base mb-1 text-rose-500"></i>
+                        نمای جانبی
+                    </button>
+                </div>
+
+                <!-- روش دوم: کلیک روی پیش‌نمایش‌های مصور -->
+                <p class="text-xs text-gray-400 pt-2">یا روی تصاویر زیر کلیک کنید:</p>
+                <div class="flex gap-3">
+                    <img onclick="changeImage('https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80', 'نمای روبرو')" 
+                         src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=200&q=80" 
+                         class="w-16 h-16 rounded-xl object-cover cursor-pointer hover:opacity-80 transition border-2 border-white/10">
+                    
+                    <img onclick="changeImage('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80', 'نمای پشت')" 
+                         src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=200&q=80" 
+                         class="w-16 h-16 rounded-xl object-cover cursor-pointer hover:opacity-80 transition border-2 border-white/10">
+                    
+                    <img onclick="changeImage('https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=800&q=80', 'نمای جانبی')" 
+                         src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=200&q=80" 
+                         class="w-16 h-16 rounded-xl object-cover cursor-pointer hover:opacity-80 transition border-2 border-white/10">
+                </div>
             </div>
         </div>
 
-        <!-- عناوین آگهی‌ها -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-black flex items-center gap-2">
-                <i class="fa-solid fa-fire text-rose-500"></i> برترین آگهی‌های لوکس
+        <!-- ================= بخش ۲: آپلود و تغییر تصویر شخصی توسط کاربر ================= -->
+        <div class="glass-card p-6 rounded-3xl shadow-2xl">
+            <h2 class="text-lg font-bold text-rose-400 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-cloud-arrow-up"></i> آپلود و جایگزینی تصویر جدید
             </h2>
-        </div>
-
-        <!-- گرید آگهی‌ها -->
-        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             
-            <!-- کارت 1 -->
-            <div class="glass-card rounded-3xl p-4 flex flex-col justify-between group">
-                <div>
-                    <div class="w-full h-52 rounded-2xl overflow-hidden mb-3 bg-slate-800 relative">
-                        <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 right-3 bg-rose-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-xl shadow-lg">در حد نو</span>
-                    </div>
-                    <h3 class="font-bold text-base mb-1">آیفون ۱۵ پرو مکس</h3>
-                    <p class="text-xs text-gray-400 mb-3">سالم ۲۵۶ گیگ - پارت نامبر LLA - با گارانتی</p>
-                </div>
-                <div class="flex justify-between items-center border-t border-gray-500/20 pt-3">
-                    <span class="text-rose-500 font-black text-base">۶۵,۰۰۰,۰۰۰ تومان</span>
-                    <button onclick="toggleFavorite('1', 'آیفون ۱۵ پرو مکس', '۶۵,۰۰۰,۰۰۰ تومان')" class="fav-btn p-2.5 rounded-2xl glass-card hover:text-rose-500 text-gray-400 transition" data-id="1">
-                        <i class="fa-solid fa-heart"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- کارت 2 -->
-            <div class="glass-card rounded-3xl p-4 flex flex-col justify-between group">
-                <div>
-                    <div class="w-full h-52 rounded-2xl overflow-hidden mb-3 bg-slate-800 relative">
-                        <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 right-3 bg-amber-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-xl shadow-lg">ویژه</span>
-                    </div>
-                    <h3 class="font-bold text-base mb-1">مک‌بوک ایر M2 نسخه ۲۰۲۳</h3>
-                    <p class="text-xs text-gray-400 mb-3">رم ۱۶ گیگ - حافظه ۵۱۲ SSD - رنگ خاکستری</p>
-                </div>
-                <div class="flex justify-between items-center border-t border-gray-500/20 pt-3">
-                    <span class="text-rose-500 font-black text-base">۵۸,۰۰۰,۰۰۰ تومان</span>
-                    <button onclick="toggleFavorite('2', 'مک‌بوک ایر M2', '۵۸,۰۰۰,۰۰۰ تومان')" class="fav-btn p-2.5 rounded-2xl glass-card hover:text-rose-500 text-gray-400 transition" data-id="2">
-                        <i class="fa-solid fa-heart"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- کارت 3 -->
-            <div class="glass-card rounded-3xl p-4 flex flex-col justify-between group">
-                <div>
-                    <div class="w-full h-52 rounded-2xl overflow-hidden mb-3 bg-slate-800 relative">
-                        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 right-3 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-xl shadow-lg">آکبند</span>
-                    </div>
-                    <h3 class="font-bold text-base mb-1">ساعت لوکس رولکس سابمارینر</h3>
-                    <p class="text-xs text-gray-400 mb-3">اتوماتیک - استیل ضدزنگ - جعبه اصلی</p>
-                </div>
-                <div class="flex justify-between items-center border-t border-gray-500/20 pt-3">
-                    <span class="text-rose-500 font-black text-base">۴۵۰,۰۰۰,۰۰۰ تومان</span>
-                    <button onclick="toggleFavorite('3', 'ساعت رولکس سابمارینر', '۴۵۰,۰۰۰,۰۰۰ تومان')" class="fav-btn p-2.5 rounded-2xl glass-card hover:text-rose-500 text-gray-400 transition" data-id="3">
-                        <i class="fa-solid fa-heart"></i>
-                    </button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- ================= 2. صفحه ثبت آگهی جدید ================= -->
-    <div id="addAdPage" class="page-view max-w-3xl mx-auto px-4 pt-6">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 relative shadow-2xl">
-            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-500/20">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-rose-500/20 text-rose-500 rounded-2xl flex items-center justify-center text-xl font-bold shadow-inner">
-                        <i class="fa-solid fa-plus-circle text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-black">ثبت آگهی خرید و فروش جدید</h2>
-                        <p class="text-xs text-gray-400 mt-0.5">مشخصات کالا و عکس آن را وارد کنید</p>
-                    </div>
-                </div>
-                <button onclick="navigateTo('homePage')" class="text-gray-400 hover:text-rose-500 p-2">
-                    <i class="fa-solid fa-arrow-left text-xl"></i>
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <input type="file" id="userCustomImage" accept="image/*" class="hidden">
+                <button onclick="document.getElementById('userCustomImage').click()" 
+                        class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 font-bold text-xs shadow-lg shadow-rose-500/20 active:scale-95 transition">
+                    انتخاب عکس جدید از سیستم
                 </button>
-            </div>
-
-            <form id="addAdForm" class="space-y-5">
-                <div>
-                    <label class="block text-xs font-bold mb-2 text-gray-400">عنوان آگهی</label>
-                    <input type="text" id="adTitle" placeholder="مثال: ساعت هوشمند گلکسی واچ ۶" required class="w-full px-4 py-3.5 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold mb-2 text-gray-400">قیمت (تومان)</label>
-                        <input type="text" id="adPrice" placeholder="مثال: ۱۲,۵۰۰,۰۰۰" required class="w-full px-4 py-3.5 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-2 text-gray-400">وضعیت کالا</label>
-                        <select id="adStatus" class="w-full px-4 py-3.5 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 bg-transparent">
-                            <option value="در حد نو" class="dark:bg-slate-900">در حد نو</option>
-                            <option value="کاملاً نو / آکبند" class="dark:bg-slate-900">کاملاً نو / آکبند</option>
-                            <option value="کارکرده" class="dark:bg-slate-900">کارکرده</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold mb-2 text-gray-400">تصویر کالا</label>
-                    <input type="file" id="adImageInput" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-3 file:px-5 file:rounded-2xl file:border-0 file:text-xs file:font-bold file:bg-rose-500 file:text-white hover:file:bg-rose-600 cursor-pointer">
-                    <div id="imagePreview" class="mt-3 hidden w-full h-52 rounded-2xl overflow-hidden glass-card">
-                        <img id="previewImg" src="" class="w-full h-full object-cover">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold mb-2 text-gray-400">توضیحات آگهی</label>
-                    <textarea id="adDesc" rows="4" placeholder="توضیحات کامل درباره مشخصات فنی و سلامت کالا..." class="w-full px-4 py-3.5 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"></textarea>
-                </div>
-
-                <button type="submit" class="w-full bg-gradient-to-r from-rose-500 via-pink-600 to-amber-500 hover:opacity-95 text-white py-4 rounded-2xl font-black text-sm shadow-xl shadow-rose-500/25 transition active:scale-95">
-                    انتشار آگهی در زیوو
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ================= 3. صفحه علاقه‌مندی‌ها ================= -->
-    <div id="favPage" class="page-view max-w-4xl mx-auto px-4 pt-6">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl">
-            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-500/20">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-rose-500/20 text-rose-500 rounded-2xl flex items-center justify-center text-xl font-bold shadow-inner">
-                        <i class="fa-solid fa-heart text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-black">آگهی‌های نشان‌شده</h2>
-                        <p class="text-xs text-gray-400 mt-0.5">لیست آگهی‌هایی که ذخیره کرده‌اید</p>
-                    </div>
-                </div>
-                <button onclick="navigateTo('homePage')" class="text-gray-400 hover:text-rose-500 p-2">
-                    <i class="fa-solid fa-arrow-left text-xl"></i>
-                </button>
-            </div>
-
-            <div id="favPageContainer" class="space-y-4">
-                <p class="text-center text-gray-400 text-sm py-12">هیچ آگهی در لیست علاقه‌مندی‌ها قرار ندارد.</p>
+                <span class="text-xs text-gray-400">عکس انتخابی شما بلافاصله جایگزین عکس اصلی بالا خواهد شد.</span>
             </div>
         </div>
+
     </div>
 
-    <!-- ================= 4. صفحه پروفایل و حساب کاربری ================= -->
-    <div id="profilePage" class="page-view max-w-4xl mx-auto px-4 pt-6">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl space-y-8">
-            
-            <!-- اطلاعات اصلی کاربر -->
-            <div class="flex items-center justify-between pb-6 border-b border-gray-500/20">
-                <div class="flex items-center gap-4">
-                    <img id="profilePageAvatar" src="https://via.placeholder.com/80" class="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl object-cover border-2 border-rose-500 shadow-xl">
-                    <div>
-                        <h2 id="profilePageName" class="text-xl font-black">نام کاربر</h2>
-                        <p id="profilePageEmail" class="text-xs text-gray-400 mt-1">user@gmail.com</p>
-                        <span class="inline-block mt-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[10px] font-bold px-2.5 py-0.5 rounded-full">حساب فعال</span>
-                    </div>
-                </div>
-                <button id="logoutBtn" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 px-4 py-2.5 rounded-2xl text-xs font-bold transition flex items-center gap-2">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>خروج از حساب</span>
-                </button>
-            </div>
+    <!-- اسکریپت جاوااسکریپت برای تعویض عکس -->
+    <script>
+        // فانکشن اصلی تغییر عکس
+        function changeImage(newSrc, tagText, element) {
+            const mainImg = document.getElementById('mainProductImage');
+            const imageTag = document.getElementById('imageTag');
 
-            <!-- تنظیمات نام و پسوورد کاربر -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- تغییر نام -->
-                <div class="glass-card p-5 rounded-2xl">
-                    <h3 class="text-sm font-bold mb-3 text-rose-500 flex items-center gap-2">
-                        <i class="fa-solid fa-user-pen"></i> ویرایش نام کاربر
-                    </h3>
-                    <input type="text" id="updateNameInput" placeholder="نام جدید خود را وارد کنید" class="w-full px-4 py-3 rounded-xl glass-card text-xs focus:outline-none mb-3">
-                    <button id="saveNameBtn" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2.5 rounded-xl font-bold text-xs transition">ثبت نام جدید</button>
-                </div>
+            // افکت محو شدن هنگام تغییر
+            mainImg.style.opacity = '0.3';
 
-               
+            setTimeout(() => {
+                mainImg.src = newSrc;
+                if(imageTag) imageTag.innerText = tagText;
+                mainImg.style.opacity = '1';
+            }, 200);
+
+            // مدیریت استایل دکمه فعال
+            if (element) {
+                document.querySelectorAll('.thumb-btn').forEach(btn => {
+                    btn.classList.remove('active-thumb');
+                });
+                element.classList.add('active-thumb');
+            }
+        }
+
+        // تغییر تصویر با آپلود فایل جدید توسط کاربر
+        document.getElementById('userCustomImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    changeImage(event.target.result, 'تصویر آپلود شده');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
