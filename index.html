@@ -52,9 +52,22 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <button id="openLoginBtn" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/10 flex items-center justify-center text-blue-400 transition active:scale-90" title="حساب کاربری">
-                    <i class="fa-solid fa-user text-lg"></i>
-                </button>
+                <!-- بخش پروفایل / ورود -->
+                <div id="userProfileArea" class="relative">
+                    <!-- حالت قبل از ورود (دکمه ورود) -->
+                    <button id="openLoginBtn" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/10 flex items-center justify-center text-blue-400 transition active:scale-90" title="ورود به حساب">
+                        <i class="fa-solid fa-user text-lg"></i>
+                    </button>
+
+                    <!-- حالت بعد از ورود (نمایش پروفایل) -->
+                    <div id="userInfo" class="hidden flex items-center gap-2 bg-slate-800/80 p-1.5 pr-3 rounded-2xl border border-white/10 cursor-pointer" id="userMenuBtn">
+                        <img id="userAvatar" src="" alt="Avatar" class="w-8 h-8 rounded-xl object-cover border border-rose-500">
+                        <span id="userName" class="text-xs font-bold text-white max-w-[100px] truncate">کاربر</span>
+                        <button id="logoutBtn" class="text-xs text-rose-400 hover:text-rose-300 p-1 mr-1" title="خروج">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
 
                 <button id="openFavBtn" type="button" class="w-10 h-10 rounded-xl glass hover:bg-white/10 flex items-center justify-center text-rose-500 transition relative active:scale-90" title="علاقه‌مندی‌ها">
                     <i class="fa-solid fa-heart text-lg"></i>
@@ -197,10 +210,39 @@
 
         let favoriteList = [];
 
-        // باز و بستن مودال ورود
+        // عناصر مربوط به حساب کاربر
+        const openLoginBtn = document.getElementById('openLoginBtn');
+        const userInfo = document.getElementById('userInfo');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const logoutBtn = document.getElementById('logoutBtn');
         const loginModal = document.getElementById('loginModal');
-        document.getElementById('openLoginBtn').onclick = () => loginModal.classList.remove('hidden');
+
+        // بررسی وضعیت ورود کاربر
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // کاربر وارد شده است
+                openLoginBtn.classList.add('hidden');
+                userInfo.classList.remove('hidden');
+                userName.innerText = user.displayName || 'کاربر زیوو';
+                userAvatar.src = user.photoURL || 'https://via.placeholder.com/40';
+            } else {
+                // کاربر وارد نشده است
+                openLoginBtn.classList.remove('hidden');
+                userInfo.classList.add('hidden');
+            }
+        });
+
+        // باز و بستن مودال ورود
+        openLoginBtn.onclick = () => loginModal.classList.remove('hidden');
         document.getElementById('closeLoginBtn').onclick = () => loginModal.classList.add('hidden');
+
+        // خروج از حساب کاربری
+        logoutBtn.onclick = () => {
+            auth.signOut().then(() => {
+                alert('از حساب کاربری خارج شدید.');
+            });
+        };
 
         // باز و بستن مودال علاقه‌مندی‌ها
         const favModal = document.getElementById('favModal');
@@ -266,12 +308,11 @@
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider)
                 .then((result) => {
-                    alert("خوش آمدید " + result.user.displayName);
                     loginModal.classList.add('hidden');
                 })
                 .catch((error) => {
-                    alert("ورود انجام شد.");
-                    loginModal.classList.add('hidden');
+                    console.error("خطا در ورود:", error);
+                    alert("مشکلی در ورود به وجود آمد. لطفاً دوباره تلاش کنید.");
                 });
         };
 
