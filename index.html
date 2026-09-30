@@ -1,397 +1,1153 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" class="dark">
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>زیوو | پلتفرم واقعی با سیستم ورود و ثبت آگهی</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <title>TradeX | معاملات دمو</title>
 
-    <style>
-        @import url('https://v1.fontapi.ir/css/Vazir');
-        
-        * {
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Tahoma, Arial, sans-serif;
+    }
 
-        body { 
-            font-family: 'Vazir', sans-serif;
-            min-height: 100vh;
-        }
+    body {
+      background: #080808;
+      color: #fff;
+      min-height: 100vh;
+    }
 
-        /* استایل حالت تاریک و روشن با افکت بلور شیشه‌ای */
-        .dark body {
-            background-color: #080c14;
-            color: #f1f5f9;
-        }
+    button,
+    input {
+      font: inherit;
+    }
 
-        body {
-            background-color: #f8fafc;
-            color: #0f172a;
-        }
+    button {
+      cursor: pointer;
+    }
 
-        /* هدر شیشه‌ای بلور */
-        .glass-nav {
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .dark .glass-nav {
-            background: rgba(15, 23, 42, 0.75);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.8);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        }
+    /* ================= LOGIN ================= */
 
-        /* کارت‌های شیشه‌ای بلور */
-        .glass-card {
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-        .dark .glass-card {
-            background: rgba(30, 41, 59, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-        }
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(
+          circle at top,
+          #420000 0%,
+          #180000 25%,
+          #080808 60%
+        );
+    }
 
-        /* دکمه دسته‌بندی فعال */
-        .active-cat {
-            background: linear-gradient(135deg, #f43f5e, #e11d48) !important;
-            color: #ffffff !important;
-            box-shadow: 0 8px 20px -4px rgba(244, 63, 94, 0.5);
-        }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(17,17,17,.96);
+      border: 1px solid #292929;
+      border-radius: 25px;
+      padding: 35px 25px;
+      text-align: center;
+      box-shadow: 0 25px 80px rgba(0,0,0,.65);
+    }
 
-        /* مدیریت نمایش صفحات */
-        .page-view {
-            display: none;
-        }
-        .page-view.active {
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      border-radius: 23px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg,#ff2929,#790000);
+      font-size: 38px;
+      font-weight: bold;
+      box-shadow: 0 10px 35px rgba(255,0,0,.25);
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    .login-card h1 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .login-card h1 span {
+      color: #ff2929;
+    }
+
+    .login-card p {
+      color: #999;
+      line-height: 1.9;
+      margin-bottom: 25px;
+    }
+
+    .google-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 15px;
+      background: #fff;
+      color: #111;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      transition: .2s;
+    }
+
+    .google-btn:hover {
+      transform: translateY(-2px);
+      opacity: .93;
+    }
+
+    .google-icon {
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .warning {
+      margin-top: 20px;
+      padding: 13px;
+      border-radius: 13px;
+      background: #241500;
+      border: 1px solid #493000;
+      color: #ffc66d;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    /* ================= APP ================= */
+
+    #app {
+      display: none;
+      min-height: 100vh;
+    }
+
+    header {
+      height: 70px;
+      padding: 0 20px;
+      background: rgba(10,10,10,.96);
+      border-bottom: 1px solid #242424;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      font-size: 23px;
+      font-weight: bold;
+    }
+
+    .brand span {
+      color: #ff2525;
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #userPhoto {
+      width: 39px;
+      height: 39px;
+      border-radius: 50%;
+      border: 2px solid #ff2525;
+      object-fit: cover;
+    }
+
+    #userName {
+      color: #ddd;
+      font-size: 13px;
+      max-width: 170px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .logout {
+      background: #171717;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 22px;
+    }
+
+    .demo-banner {
+      text-align: center;
+      background: linear-gradient(90deg,#350000,#160000);
+      border: 1px solid #5b1111;
+      color: #ff9292;
+      border-radius: 14px;
+      padding: 13px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.35fr .8fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: #111;
+      border: 1px solid #242424;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .price-card {
+      margin-bottom: 18px;
+    }
+
+    .coin-title {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    #price {
+      font-size: 35px;
+      font-weight: bold;
+      direction: ltr;
+      text-align: right;
+    }
+
+    #price.up {
+      color: #20df86;
+    }
+
+    #price.down {
+      color: #ff4c4c;
+    }
+
+    #change {
+      margin-top: 8px;
+      font-size: 13px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .balance {
+      background: #181818;
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .balance small {
+      color: #888;
+    }
+
+    .balance strong {
+      font-size: 22px;
+    }
+
+    .label {
+      display: block;
+      color: #999;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      background: #181818;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 11px;
+      padding: 14px;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    input:focus {
+      border-color: #ff2424;
+    }
+
+    .leverage {
+      display: grid;
+      grid-template-columns: repeat(5,1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .lev-btn {
+      background: #181818;
+      color: #ccc;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 11px 4px;
+    }
+
+    .lev-btn.active {
+      background: #ed2020;
+      border-color: #ed2020;
+      color: white;
+      font-weight: bold;
+    }
+
+    .info-box {
+      background: #181818;
+      border-radius: 13px;
+      padding: 14px;
+      margin-bottom: 15px;
+      font-size: 13px;
+      line-height: 2.2;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .trade-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .trade-btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 15px;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      transition: .15s;
+    }
+
+    .trade-btn:hover {
+      transform: translateY(-1px);
+      opacity: .9;
+    }
+
+    .long {
+      background: #087a49;
+    }
+
+    .short {
+      background: #a41616;
+    }
+
+    /* ================= POSITION ================= */
+
+    #position {
+      display: none;
+      margin-top: 18px;
+    }
+
+    .position-box {
+      background: #181818;
+      border: 1px solid #2b2b2b;
+      border-radius: 15px;
+      padding: 16px;
+    }
+
+    #positionType {
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .position-line {
+      display: flex;
+      justify-content: space-between;
+      color: #aaa;
+      padding: 4px 0;
+    }
+
+    .position-line span:last-child {
+      color: #eee;
+    }
+
+    #profit {
+      font-size: 27px;
+      font-weight: bold;
+      margin: 12px 0 4px;
+      direction: ltr;
+      text-align: right;
+    }
+
+    .green {
+      color: #20df86 !important;
+    }
+
+    .red {
+      color: #ff4c4c !important;
+    }
+
+    .close-btn {
+      width: 100%;
+      background: #242424;
+      color: white;
+      border: 1px solid #3b3b3b;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    /* ================= STATS ================= */
+
+    .stats {
+      display: grid;
+      gap: 11px;
+    }
+
+    .stat {
+      background: #181818;
+      border-radius: 13px;
+      padding: 15px;
+    }
+
+    .stat small {
+      display: block;
+      color: #888;
+      margin-bottom: 5px;
+    }
+
+    .stat strong {
+      font-size: 19px;
+    }
+
+    /* ================= HISTORY ================= */
+
+    .history {
+      margin-top: 18px;
+    }
+
+    .history-item {
+      padding: 13px 3px;
+      border-bottom: 1px solid #292929;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .empty {
+      color: #777;
+      text-align: center;
+      padding: 25px 5px;
+    }
+
+    @media (max-width: 800px) {
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      #userName {
+        display: none;
+      }
+
+      #price {
+        font-size: 29px;
+      }
+    }
+
+    @media (max-width: 450px) {
+
+      .container {
+        padding: 13px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      header {
+        padding: 0 13px;
+      }
+
+      .leverage {
+        gap: 5px;
+      }
+
+    }
+  </style>
 </head>
-<body class="pb-24">
 
-    <!-- هدر شیشه‌ای -->
-    <header class="sticky top-0 z-40 glass-nav shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
-            
-            <!-- لوگو -->
-            <div onclick="navigateTo('homePage')" class="flex items-center gap-3 cursor-pointer">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-500 flex items-center justify-center font-black text-xl text-white shadow-md shadow-rose-500/30">Z</div>
-                <span class="text-2xl font-black bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 bg-clip-text text-transparent">Zivo</span>
-            </div>
+<body>
 
-            <!-- دکمه‌های هدر -->
-            <div class="flex items-center gap-2">
-                <!-- دکمه ورود / پروفایل -->
-                <button id="authBtn" onclick="handleAuthClick()" class="px-4 py-2 rounded-2xl glass-card text-xs font-bold flex items-center gap-2 hover:border-rose-500 transition">
-                    <i class="fa-solid fa-user text-rose-500"></i>
-                    <span id="authBtnText">ورود / ثبت‌نام</span>
-                </button>
+<!-- ==================================================
+     LOGIN
+================================================== -->
 
-                <!-- دکمه تغییر تم (شب / روز) -->
-                <button id="themeToggleBtn" type="button" class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-amber-400 hover:scale-105 active:scale-95 transition" title="تغییر تم">
-                    <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
-                </button>
+<section id="loginPage">
 
-                <!-- دکمه ثبت آگهی -->
-                <button onclick="navigateTo('addAdPage')" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-rose-500/25 transition active:scale-95">
-                    <i class="fa-solid fa-plus text-sm"></i>
-                    <span>ثبت آگهی</span>
-                </button>
-            </div>
+  <div class="login-card">
 
-        </div>
-    </header>
+    <div class="logo">T</div>
 
-    <!-- ================= 1. صفحه اصلی (نمایش دسته‌بندی‌ها و کارت‌ها) ================= -->
-    <main id="homePage" class="page-view active max-w-7xl mx-auto px-4 pt-6 space-y-8">
-        
-        <!-- جستجو -->
-        <div class="relative">
-            <input type="text" id="searchInput" oninput="filterProducts()" placeholder="جستجوی عنوان آگهی، آیفون، پورشه، ساعت..." 
-                class="w-full pr-12 pl-4 py-4 rounded-3xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-inner">
-            <i class="fa-solid fa-magnifying-glass absolute right-4 top-4 text-gray-400 text-xl"></i>
-        </div>
+    <h1>
+      Trade<span>X</span>
+    </h1>
 
-        <!-- دکمه‌های تغییر دسته‌بندی (تغییر عکس‌ها و متن‌های صفحه) -->
-        <div>
-            <h2 class="text-xs font-bold text-gray-400 mb-3 px-1">انتخاب دسته‌بندی محصولات:</h2>
-            <div class="flex flex-wrap gap-2.5">
-                <button onclick="switchCategory('all', this)" class="cat-btn active-cat px-5 py-3 rounded-2xl glass-card text-xs font-bold transition flex items-center gap-2">
-                    <i class="fa-solid fa-border-all"></i> همه آگهی‌ها
-                </button>
-                <button onclick="switchCategory('digital', this)" class="cat-btn px-5 py-3 rounded-2xl glass-card text-xs font-bold transition flex items-center gap-2">
-                    <i class="fa-solid fa-mobile-screen"></i> کالای دیجیتال
-                </button>
-                <button onclick="switchCategory('cars', this)" class="cat-btn px-5 py-3 rounded-2xl glass-card text-xs font-bold transition flex items-center gap-2">
-                    <i class="fa-solid fa-car"></i> خودروهای لوکس
-                </button>
-                <button onclick="switchCategory('watches', this)" class="cat-btn px-5 py-3 rounded-2xl glass-card text-xs font-bold transition flex items-center gap-2">
-                    <i class="fa-solid fa-clock"></i> ساعت‌های خاص
-                </button>
-            </div>
-        </div>
+    <p>
+      شبیه‌ساز معاملات اهرمی
+      <br>
+      برای ادامه با حساب Google وارد شوید.
+    </p>
 
-        <!-- عنوان بخش -->
-        <div class="flex justify-between items-center border-b border-gray-500/20 pb-4">
-            <h2 id="categoryTitle" class="text-lg font-black text-rose-500 flex items-center gap-2">
-                <i class="fa-solid fa-fire"></i> همه آگهی‌ها
-            </h2>
-            <span id="itemCount" class="text-xs text-gray-400">تعداد آگهی: ۰</span>
-        </div>
+    <button
+      class="google-btn"
+      id="googleLogin"
+    >
+      <span class="google-icon">G</span>
+      ورود با Google
+    </button>
 
-        <!-- گرید کارت‌های آگهی -->
-        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- کارت‌ها به‌صورت دینامیک از جاوااسکریپت بارگذاری می‌شوند -->
-        </div>
-
-    </main>
-
-    <!-- ================= 2. صفحه ورود و انتخاب رمز عبور (Login / Password) ================= -->
-    <div id="loginPage" class="page-view max-w-md mx-auto px-4 pt-10">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-            
-            <div class="text-center space-y-2">
-                <div class="w-12 h-12 bg-rose-500/20 text-rose-500 rounded-2xl flex items-center justify-center font-bold text-2xl mx-auto mb-3">
-                    <i class="fa-solid fa-lock"></i>
-                </div>
-                <h2 class="text-xl font-black">ورود به حساب کاربری</h2>
-                <p class="text-xs text-gray-400">برای ثبت آگهی و مدیریت حساب، وارد شوید</p>
-            </div>
-
-            <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold mb-2 text-gray-400">نام کاربری یا ایمیل</label>
-                    <input type="text" id="loginUser" placeholder="مثال: 010604=8" required class="w-full px-4 py-3.5 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold mb-2 text-gray-400">رمز عبور (Password)</label>
-                    <div class="relative">
-                        <input type="password" id="loginPassword" placeholder="••••••••" required class="w-full px-4 py-3.5 pl-12 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-                        <button type="button" onclick="togglePasswordVisibility('loginPassword', 'eyeIcon')" class="absolute left-4 top-3.5 text-gray-400 hover:text-rose-500">
-                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between text-xs text-gray-400 pt-1">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" class="accent-rose-500 rounded">
-                        <span>مرا به خاطر بسپار</span>
-                    </label>
-                    <a href="#" onclick="alert('لینک بازیابی رمز عبور به ایمیل شما ارسال شد.')" class="hover:text-rose-500">رمز عبور را فراموش کرده‌اید؟</a>
-                </div>
-
-                <button type="submit" class="w-full bg-gradient-to-r from-rose-500 via-pink-600 to-amber-500 hover:opacity-95 text-white py-4 rounded-2xl font-black text-sm shadow-xl shadow-rose-500/25 transition active:scale-95">
-                    ورود به حساب
-                </button>
-            </form>
-
-            <div class="text-center text-xs text-gray-400 pt-2">
-                حساب کاربری ندارید؟ <button onclick="navigateTo('homePage')" class="text-rose-500 font-bold">بازگشت به صفحه اصلی</button>
-            </div>
-
-        </div>
+    <div class="warning">
+      ⚠️ حالت DEMO
+      <br>
+      این برنامه به صرافی متصل نیست و تمام
+      موجودی و معاملات آن مجازی هستند.
     </div>
 
-    <!-- ================= 3. صفحه ثبت آگهی واقعی ================= -->
-    <div id="addAdPage" class="page-view max-w-2xl mx-auto px-4 pt-6">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 relative shadow-2xl space-y-6">
-            
-            <div class="flex items-center justify-between border-b border-gray-500/20 pb-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-rose-500/20 text-rose-500 rounded-2xl flex items-center justify-center font-bold text-xl">
-                        <i class="fa-solid fa-plus-circle"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-black">ثبت آگهی واقعی جدید</h2>
-                        <p class="text-xs text-gray-400">اطلاعات و عکس آگهی را وارد کنید</p>
-                    </div>
-                </div>
-                <button onclick="navigateTo('homePage')" class="text-gray-400 hover:text-rose-500 p-2">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
+  </div>
 
-            <form id="addAdForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold mb-2 text-gray-400">عنوان آگهی</label>
-                    <input type="text" id="adTitle" placeholder="مثال: آیفون ۱۵ پرو مکس ۲۵۶ گیگ" required class="w-full px-4 py-3.5 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-                </div>
+</section>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold mb-2 text-gray-400">قیمت (تومان)</label>
-                        <input type="text" id="adPrice" placeholder="مثال: ۶۵,۰۰۰,۰۰۰" required class="w-full px-4 py-3.5 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-2 text-gray-400">انتخاب دسته‌بندی</label>
-                        <select id="adCategory" class="w-full px-4 py-3.5 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 dark:bg-slate-900 bg-white">
-                            <option value="digital">کالای دیجیتال</option>
-                            <option value="cars">خودروهای لوکس</option>
-                            <option value="watches">ساعت‌های خاص</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div>
-                    <label class="block text-xs font-bold mb-2 text-gray-400">تصویر کالا</label>
-                    <input type="file" id="adImageInput" accept="image/*" required class="w-full text-xs text-gray-400 file:mr-4 file:py-3 file:px-5 file:rounded-2xl file:border-0 file:text-xs file:font-bold file:bg-rose-500 file:text-white hover:file:bg-rose-600 cursor-pointer">
-                    <div id="imagePreview" class="mt-3 hidden w-full h-48 rounded-2xl overflow-hidden glass-card">
-                        <img id="previewImg" src="" class="w-full h-full object-cover">
-                    </div>
-                </div>
+<!-- ==================================================
+     MAIN APP
+================================================== -->
 
-                <div>
-                    <label class="block text-xs font-bold mb-2 text-gray-400">توضیحات آگهی</label>
-                    <textarea id="adDesc" rows="3" placeholder="توضیحات کامل سلامت و مشخصات کالا..." class="w-full px-4 py-3.5 rounded-2xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"></textarea>
-                </div>
+<div id="app">
 
-                <button type="submit" class="w-full bg-gradient-to-r from-rose-500 via-pink-600 to-amber-500 hover:opacity-95 text-white py-4 rounded-2xl font-black text-sm shadow-xl shadow-rose-500/25 transition active:scale-95">
-                    انتشار فوری آگهی در سایت
-                </button>
-            </form>
+  <header>
 
-        </div>
+    <div class="brand">
+      Trade<span>X</span>
     </div>
 
-    <!-- ================= اسکریپت‌های مدیریت سایت ================= -->
-    <script>
-        // ۱. دیتابیس آگهی‌ها
-        let database = {
-            digital: [
-                { id: '1', title: 'آیفون ۱۵ پرو مکس', price: '۶۵,۰۰۰,۰۰۰ تومان', desc: '۲۵۶ گیگ - پارت LLA - سلامت باتری ۱۰۰٪', cat: 'digital', img: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80' },
-                { id: '2', title: 'مک‌بوک ایر M2', price: '۵۸,۰۰۰,۰۰۰ تومان', desc: 'رم ۱۶ گیگ - SSD ۵۱۲ - مشکی', cat: 'digital', img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80' }
-            ],
-            cars: [
-                { id: '3', title: 'پورشه پانامرا توربو', price: '۱۲,۵۰۰,۰۰۰,۰۰۰ تومان', desc: 'مدل ۲۰۲۲ - بدون رنگ - فول کامل', cat: 'cars', img: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80' },
-                { id: '4', title: 'مرسدس بنز S500', price: '۱۵,۰۰۰,۰۰۰,۰۰۰ تومان', desc: 'مدل ۲۰۲۱ - کیت AMG - مشکی آبنوسی', cat: 'cars', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=800&q=80' }
-            ],
-            watches: [
-                { id: '5', title: 'ساعت رولکس سابمارینر', price: '۴۵۰,۰۰۰,۰۰۰ تومان', desc: 'طلا و استیل - با جعبه و مدارک اصلی', cat: 'watches', img: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80' }
-            ]
-        };
+    <div class="user-area">
 
-        let currentCategory = 'all';
-        let uploadedBase64Img = '';
-        let currentUser = localStorage.getItem('zivo_user') || null;
+      <span id="userName"></span>
 
-        // وضعیت لاگین اولیه
-        updateUserUI();
+      <img
+        id="userPhoto"
+        alt="Profile"
+      >
 
-        // ۲. تغییر تم شب / روز
-        const themeToggleBtn = document.getElementById('themeToggleBtn');
-        const themeIcon = document.getElementById('themeIcon');
+      <button
+        class="logout"
+        id="logout"
+      >
+        خروج
+      </button>
 
-        themeToggleBtn.onclick = () => {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            themeIcon.className = isDark ? 'fa-solid fa-moon text-lg text-amber-400' : 'fa-solid fa-sun text-lg text-amber-500';
-            localStorage.setItem('zivo_theme', isDark ? 'dark' : 'light');
-        };
+    </div>
 
-        if (localStorage.getItem('zivo_theme') === 'light') {
-            document.documentElement.classList.remove('dark');
-            themeIcon.className = 'fa-solid fa-sun text-lg text-amber-500';
+  </header>
+
+
+  <main class="container">
+
+    <div class="demo-banner">
+      🧪 DEMO — معاملات و موجودی کاملاً مجازی هستند
+    </div>
+
+
+    <div class="grid">
+
+      <!-- ================= LEFT ================= -->
+
+      <div>
+
+        <div class="card price-card">
+
+          <div class="coin-title">
+            BTC / تومان
+          </div>
+
+          <div id="price">
+            257,000,000
+          </div>
+
+          <div id="change">
+            +0.00%
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <h3 class="section-title">
+            ایجاد معامله
+          </h3>
+
+
+          <div class="balance">
+
+            <div>
+
+              <small>
+                موجودی دمو
+              </small>
+
+              <br>
+
+              <strong id="balance">
+                100,000
+              </strong>
+
+              تومان
+
+            </div>
+
+          </div>
+
+
+          <label class="label">
+            انتخاب اهرم
+          </label>
+
+          <div class="leverage">
+
+            <button
+              class="lev-btn active"
+              data-lev="1"
+            >
+              1×
+            </button>
+
+            <button
+              class="lev-btn"
+              data-lev="2"
+            >
+              2×
+            </button>
+
+            <button
+              class="lev-btn"
+              data-lev="3"
+            >
+              3×
+            </button>
+
+            <button
+              class="lev-btn"
+              data-lev="5"
+            >
+              5×
+            </button>
+
+            <button
+              class="lev-btn"
+              data-lev="10"
+            >
+              10×
+            </button>
+
+          </div>
+
+
+          <label class="label">
+            مارجین
+          </label>
+
+          <input
+            type="number"
+            id="margin"
+            value="1000"
+            min="1"
+            placeholder="مثلاً 1000"
+          >
+
+
+          <div class="info-box">
+
+            <div class="info-row">
+              <span>اهرم</span>
+              <strong id="selectedLev">
+                1×
+              </strong>
+            </div>
+
+            <div class="info-row">
+              <span>ارزش معامله</span>
+              <strong id="positionValue">
+                1,000
+              </strong>
+            </div>
+
+            <div class="info-row">
+              <span>قیمت ورود</span>
+              <strong id="entryPreview">
+                257,000,000
+              </strong>
+            </div>
+
+          </div>
+
+
+          <div class="trade-buttons">
+
+            <button
+              class="trade-btn long"
+              id="longBtn"
+            >
+              🟢 LONG
+            </button>
+
+            <button
+              class="trade-btn short"
+              id="shortBtn"
+            >
+              🔴 SHORT
+            </button>
+
+          </div>
+
+
+          <!-- POSITION -->
+
+          <div id="position">
+
+            <div class="position-box">
+
+              <div id="positionType">
+                🟢 LONG
+              </div>
+
+              <div class="position-line">
+                <span>اهرم</span>
+                <span id="openLeverage"></span>
+              </div>
+
+              <div class="position-line">
+                <span>مارجین</span>
+                <span id="openMargin"></span>
+              </div>
+
+              <div class="position-line">
+                <span>قیمت ورود</span>
+                <span id="entryPrice"></span>
+              </div>
+
+              <div class="position-line">
+                <span>قیمت فعلی</span>
+                <span id="currentPrice"></span>
+              </div>
+
+              <div id="profit">
+                +0 تومان
+              </div>
+
+              <div
+                id="profitPercent"
+                class="green"
+              >
+                +0.00%
+              </div>
+
+              <button
+                class="close-btn"
+                id="closePosition"
+              >
+                بستن معامله
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= RIGHT ================= -->
+
+      <div>
+
+        <div class="card">
+
+          <h3 class="section-title">
+            آمار حساب
+          </h3>
+
+          <div class="stats">
+
+            <div class="stat">
+
+              <small>
+                تعداد معاملات
+              </small>
+
+              <strong id="tradeCount">
+                0
+              </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+              <small>
+                سود / زیان کل
+              </small>
+
+              <strong id="totalProfit">
+                0 تومان
+              </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+              <small>
+                بیشترین اهرم
+              </small>
+
+              <strong id="maxLev">
+                1×
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="card history">
+
+          <h3 class="section-title">
+            تاریخچه معاملات
+          </h3>
+
+          <div id="historyList">
+
+            <div class="empty">
+              هنوز معامله‌ای انجام نشده.
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- ==================================================
+     FIREBASE + APP
+================================================== -->
+
+<script type="module">
+
+  import {
+    initializeApp
+  }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+  }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+  /* ==================================================
+     FIREBASE CONFIG
+  ================================================== */
+
+  const firebaseConfig = {
+
+    apiKey:
+      "AIzaSyBrMw31xVAszqXUvP6AiufOGL_6XdYoaM4",
+
+    authDomain:
+      "myai-bd693.firebaseapp.com",
+
+    projectId:
+      "myai-bd693",
+
+    storageBucket:
+      "myai-bd693.firebasestorage.app",
+
+    messagingSenderId:
+      "305975730704",
+
+    appId:
+      "1:305975730704:web:574551aa71831607a06095",
+
+    measurementId:
+      "G-DQN9NWSC9"
+
+  };
+
+
+  /* ==================================================
+     INITIALIZE FIREBASE
+  ================================================== */
+
+  const firebaseApp =
+    initializeApp(firebaseConfig);
+
+  const auth =
+    getAuth(firebaseApp);
+
+  const provider =
+    new GoogleAuthProvider();
+
+
+  /* ==================================================
+     DOM
+  ================================================== */
+
+  const loginPage =
+    document.getElementById("loginPage");
+
+  const appPage =
+    document.getElementById("app");
+
+  const googleLogin =
+    document.getElementById("googleLogin");
+
+  const logout =
+    document.getElementById("logout");
+
+  const userName =
+    document.getElementById("userName");
+
+  const userPhoto =
+    document.getElementById("userPhoto");
+
+
+  /* ==================================================
+     GOOGLE LOGIN
+  ================================================== */
+
+  googleLogin.addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        googleLogin.disabled = true;
+
+        googleLogin.innerHTML =
+          "در حال ورود...";
+
+
+        await signInWithPopup(
+          auth,
+          provider
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Google Login:",
+          error
+        );
+
+
+        let message =
+          "ورود با Google انجام نشد.";
+
+
+        if (
+          error.code ===
+          "auth/popup-closed-by-user"
+        ) {
+
+          message =
+            "پنجره ورود بسته شد.";
+
         }
 
-        // ۳. تغییر بین صفحات
-        function navigateTo(pageId) {
-            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(pageId);
-            if (target) target.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (
+          error.code ===
+          "auth/unauthorized-domain"
+        ) {
+
+          message =
+            "این دامنه در Firebase مجاز نشده است.";
+
         }
 
-        // ۴. مدیریت ورود و خروج
-        function handleAuthClick() {
-            if (currentUser) {
-                if (confirm(`آیا می‌خواهید از حساب ${currentUser} خارج شوید؟`)) {
-                    currentUser = null;
-                    localStorage.removeItem('zivo_user');
-                    updateUserUI();
-                }
-            } else {
-                navigateTo('loginPage');
-            }
-        }
 
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            const username = document.getElementById('loginUser').value.trim();
-            currentUser = username;
-            localStorage.setItem('zivo_user', username);
-            updateUserUI();
-            alert(`خوش آمدید ${username}! ورود شما با موفقیت انجام شد.`);
-            navigateTo('homePage');
-        }
+        alert(message);
 
-        function updateUserUI() {
-            const btnText = document.getElementById('authBtnText');
-            if (currentUser) {
-                btnText.innerText = currentUser;
-            } else {
-                btnText.innerText = 'ورود / ثبت‌نام';
-            }
-        }
 
-        function togglePasswordVisibility(inputId, iconId) {
-            const input = document.getElementById(inputId);
-            const icon = document.getElementById(iconId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.className = 'fa-solid fa-eye-slash';
-            } else {
-                input.type = 'password';
-                icon.className = 'fa-solid fa-eye';
-            }
-        }
+        googleLogin.disabled = false;
 
-        // ۵. تغییر دسته‌بندی و تعویض محتوا و عکس‌ها
-        function switchCategory(catKey, btnEl) {
-            currentCategory = catKey;
-            
-            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active-cat'));
-            if(btnEl) btnEl.classList.add('active-cat');
+        googleLogin.innerHTML =
+          '<span class="google-icon">G</span> ورود با Google';
 
-            const titleEl = document.getElementById('categoryTitle');
-            if (catKey === 'all') titleEl.innerHTML = `<i class="fa-solid fa-border-all"></i> همه آگهی‌ها`;
-            else if (catKey === 'digital') titleEl.innerHTML = `<i class="fa-solid fa-mobile-screen"></i> کالای دیجیتال`;
-            else if (catKey === 'cars') titleEl.innerHTML = `<i class="fa-solid fa-car"></i> خودروهای لوکس`;
-            else if (catKey === 'watches') titleEl.innerHTML = `<i class="fa-solid fa-clock"></i> ساعت‌های خاص`;
+      }
 
-            renderProducts();
-        }
+    }
+  );
 
-        // ۶. نمایش کارت‌ها
-        function renderProducts(itemsToRender = null) {
-            const grid = document.getElementById('productGrid');
-            const itemCount = document.getElementById('itemCount');
 
-            let items = [];
-            if (itemsToRender) {
-                items = itemsToRender;
-            } else if (currentCategory === 'all') {
-                items = [...database.digital, ...database.cars, ...database.watches];
-            } else {
-   
+  /* ==================================================
+     LOGOUT
+  ================================================== */
+
+  logout.addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        await signOut(auth);
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+  );
+
+
+  /* ==================================================
+     AUTH STATE
+  ================================================== */
+
+  onAuthStateChanged(
+    auth,
+    user => {
+
+      if (user) {
+
+        loginPage.style.display =
+          "none";
+
+        appPage.style.display =
+          "block";
+
+
+        userName.textContent =
+          user.displayName ||
+          user.email ||
+          "کاربر";
+
+
+        userPhoto.src =
+          user.photoURL ||
+          "https://ui-avatars.com/api/?name=User";
+
+
+        startDemo();
+
+      } else {
+
+        loginPage.style.display =
+          "flex";
+
+        appPage.style.display =
+          "none";
+
+
+        userName.textContent =
+          "";
+
+        userPhoto.src =
+          "";
+
+      }
+
+    }
+  );
+
+
+  /* ==================================================
+     DEMO TRADING
+  ================================================== */
+
+  let price = 257000000;
+
+  let selectedLeverage = 1;
+
+  let balance = 100000;
+
+  let position = null;
+
+  let tradeCount = 0;
+
+  let totalProfit = 0;
+
+  let maxLeverage = 1;
+
+  let started = false;
+
+
+  /* ==================================================
+     ELEMENTS
+  ================================================== */
+
+  const priceElement =
+    document.getElementById("price");
+
+  const changeElement =
+    document.getElementById("change");
+
+  const balanceElement =
+    document.getElementById("balance");
+
+  const marginElement =
+    document.getElementById("margin");
+
+  const selectedLevElement =
+    document.getElementById("selectedLev");
+
+  const positionValueElement =
+    document.getElementById("positionValue");
+
+
+  /* ==================================================
+     LEVERAGE
+  ================================================== */
+
+  document
+    .querySelectorAll(".lev-btn")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          document
+            .querySelectorAll(".lev-btn")
+            .forEach
